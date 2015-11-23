@@ -14,29 +14,6 @@ namespace AutoCADAPI.Lab4
 {
     public partial class BlockTab : UserControl
     {
-        public Boolean InputA
-        {
-            get
-            {
-                string content = this.fieldInputA.Text;
-                if (content == "1")
-                    return true;
-                else
-                    return false;
-            }
-        }
-        public Boolean InputB
-        {
-            get
-            {
-                string content = this.fieldInputB.Text;
-                if (content == "1")
-                    return true;
-                else
-                    return false;
-            }
-        }
-
         public String Blockname
         {
             get
@@ -64,11 +41,15 @@ namespace AutoCADAPI.Lab4
             {
                 this.Directory_Path = dia.SelectedPath;
                 this.listOfBlocks.Items.Clear();
-                foreach(FileInfo f in new DirectoryInfo(this.Directory_Path).GetFiles())
+                foreach (FileInfo f in new DirectoryInfo(this.Directory_Path).GetFiles())
                 {
                     if (f.Extension.ToUpper().Contains("DWG"))
                         this.listOfBlocks.Items.Add(f.Name);
                 }
+                if (this.listOfBlocks.Items.Count > 0)
+                    HidesState(true);
+                else
+                    HidesState(false);
             }
             else
                 this.Directory_Path = String.Empty;
@@ -80,7 +61,37 @@ namespace AutoCADAPI.Lab4
             //Agrego el using renombrando la clase aplicación
             //using AcadApp = Autodesk.AutoCAD.ApplicationServices.Application;
             doc = AcadApp.DocumentManager.MdiActiveDocument;
-            doc.SendStringToExecute("INSERTCOMPUERTA ", true, false, false);
+            doc.SendStringToExecute("InsertaVehiculo ", true, false, false);
         }
+
+        public void PrintVelocity(List<Movil> mobiles)
+        { 
+            if(mobiles.Count == 0)
+            {
+                VelocityState(false);
+                return;
+            }
+            VelocityState(true);
+            this.bVelocidades.Items.Clear();
+            foreach(Movil m in mobiles)
+            {
+                this.bVelocidades.Items.Add(m.Data);
+            }
+
+        }
+        void HidesState(bool state)
+        {
+            this.lVehiculos.Visible = state;
+            this.lOculto.Visible = state;
+            this.listOfBlocks.Enabled = state;
+            this.listOfBlocks.Visible = state;
+        }
+        void VelocityState(bool state)
+        {
+            this.lVelocidad.Visible = state;
+            this.bVelocidades.Visible = state;
+            this.bVelocidades.Enabled = state;
+        }
+        
     }
 }

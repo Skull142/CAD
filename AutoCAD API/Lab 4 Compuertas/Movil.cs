@@ -7,20 +7,23 @@ using Autodesk.AutoCAD.EditorInput;
 
 namespace AutoCADAPI.Lab4
 {
-    class Movil
+    public class Movil
     {
         Double d = 10;
         //
         ObjectId line;
-        ObjectId mobile;
+        public ObjectId mobile;
         //
         Polyline ruta;
         LineSegment2d segmentoActual;
-        int segmentoActualIndex;
+        public int segmentoActualIndex;
         int numeroSegmentos;
         //
         BlockReference bloque;
         Point3d bloqueCentro;
+        //
+        public AttributeManager attribute;
+        public double velocity;
 
 
         public Movil(ref ObjectId line, ref ObjectId mobile)
@@ -34,11 +37,14 @@ namespace AutoCADAPI.Lab4
                              (bloque.GeometricExtents.MinPoint.Y +
                              bloque.GeometricExtents.MaxPoint.Y) / 2,
                              0);
-            numeroSegmentos = this.ruta.NumberOfVertices - 1;
-            segmentoActualIndex = 0;
-            segmentoActual = this.ruta.GetLineSegment2dAt(segmentoActualIndex);
+            this.numeroSegmentos = this.ruta.NumberOfVertices - 1;
+            this.segmentoActualIndex = 0;
+            this.segmentoActual = this.ruta.GetLineSegment2dAt(segmentoActualIndex);
             Lab3.DBMan.UpdateBlockPosition(new Point3d(this.segmentoActual.StartPoint.X, this.segmentoActual.StartPoint.Y, 0), mobile);
-
+            //
+            this.attribute = new AttributeManager(mobile);
+            this.velocity = 0f;
+            this.attribute.SetAttribute("Velocity", this.velocity+" [Kms/hr]");
         }
         public void Move()
         {
@@ -53,23 +59,23 @@ namespace AutoCADAPI.Lab4
                     if (segmentoActualIndex + 1 > numeroSegmentos)
                     {
                         segmentoActualIndex = 0;
-                        ed.WriteMessage("REINICIO!. {0} de {1}\n", segmentoActualIndex + 1, numeroSegmentos);
+                        //ed.WriteMessage("REINICIO!. {0} de {1}\n", segmentoActualIndex + 1, numeroSegmentos);
                         segmentoActual = this.ruta.GetLineSegment2dAt(segmentoActualIndex);
                         Lab3.DBMan.UpdateBlockPosition(new Point3d(this.segmentoActual.StartPoint.X, this.segmentoActual.StartPoint.Y, 0), mobile);
                         return;
                     }
                     else
                     {
-                        ed.WriteMessage("iNCREMENTANDO!. {0} de {1}\n", segmentoActualIndex + 1, numeroSegmentos);
+                        //ed.WriteMessage("iNCREMENTANDO!. {0} de {1}\n", segmentoActualIndex + 1, numeroSegmentos);
                         segmentoActual = this.ruta.GetLineSegment2dAt(segmentoActualIndex);
                         Lab3.DBMan.UpdateBlockPosition(new Point3d(this.segmentoActual.StartPoint.X, this.segmentoActual.StartPoint.Y, 0), mobile);
                     }
-                    ed.WriteMessage("{0}", segmentoActualIndex);
+                    //ed.WriteMessage("{0}", segmentoActualIndex);
                 }
-                else
-                {
-                    ed.WriteMessage("MOVIENDOSE!. {0} de {1}\n", segmentoActualIndex + 1, numeroSegmentos);
-                }
+                //else
+                //{
+                    //ed.WriteMessage("MOVIENDOSE!. {0} de {1}\n", segmentoActualIndex + 1, numeroSegmentos);
+                //}
                 ApplyTransforms();
                 //
                 //ed.WriteMessage("{0}\n", bloque.Position.DistanceTo(new Point3d(segmentoActual.EndPoint.X, segmentoActual.EndPoint.Y, 0)));
@@ -90,12 +96,12 @@ namespace AutoCADAPI.Lab4
                     segmentoActual.EndPoint.X - segmentoActual.StartPoint.X,
                     segmentoActual.EndPoint.Y - segmentoActual.StartPoint.Y,
                     0);
-                ed.WriteMessage("1: {0}\n", v);
+                //ed.WriteMessage("1: {0}\n", v);
                 //Hago unitario a mi vector
                 v = v.MultiplyBy(1 / segmentoActual.Length);
-                ed.WriteMessage("2: {0}\n", v);
+                //ed.WriteMessage("2: {0}\n", v);
                 v = v.MultiplyBy(d);
-                ed.WriteMessage("3: {0}\n", v);
+                //ed.WriteMessage("3: {0}\n", v);
             }
             else
             {
@@ -105,11 +111,13 @@ namespace AutoCADAPI.Lab4
                    bloque.Position.Y - centroCurva.Y,
                    0);
                 v = v.GetPerpendicularVector();
-                ed.WriteMessage("1: {0}\n", v);
+                //ed.WriteMessage("1: {0}\n", v);
                 v = v.MultiplyBy(d*0.60f);
-                ed.WriteMessage("2: {0}\n", v);
+                //ed.WriteMessage("2: {0}\n", v);
                 //v = v.MultiplyBy(1/d);
-            }           
+            }
+            velocity = v.Length;
+            this.attribute.SetAttribute("Velocity", this.velocity + " [Kms/hr]");
             //Crear una matriz de transformación
             Matrix3d matrix = Matrix3d.Displacement(v);
             Matrix3d rotMatrix =
@@ -127,6 +135,13 @@ namespace AutoCADAPI.Lab4
             {
                 Move();
                 System.Threading.Thread.Sleep(1000);
+            }
+        }
+        public string Data
+        {
+            get
+            {
+                return this.attribute.GetAttribute("ID").ToString() + ": " + this.attribute.GetAttribute("Velocidad").ToString();
             }
         }
     }

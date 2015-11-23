@@ -22,14 +22,15 @@ namespace AutoCADAPI.Lab4
         Palette blockTab;
         BlockTab ctrl_blockTab;
 
-        [CommandMethod("LOAD_UI")]
+        [CommandMethod("nGUI")]
         public void loadUI()
         {
             if (blockTab == null)
             {
-                mipaleta = new PaletteSet("Compuertas logicas");
+                mipaleta = new PaletteSet("Evaluador de Semaforo");
                 ctrl_blockTab = new BlockTab();
                 blockTab = mipaleta.Add("Insertar", ctrl_blockTab);
+                mipaleta.Visible = true;
             }
             else
                 mipaleta.Visible = true;
@@ -169,7 +170,6 @@ namespace AutoCADAPI.Lab4
                 vol.Test();
             }
         }
-
         [CommandMethod("INSERTCOMPUERTA")]
         public void InsertCompuerta()
         {

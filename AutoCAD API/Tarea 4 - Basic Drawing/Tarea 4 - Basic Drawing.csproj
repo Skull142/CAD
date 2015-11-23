@@ -32,15 +32,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="accoremgd">
-      <HintPath>..\..\..\..\..\Program Files\Autodesk\AutoCAD 2015\accoremgd.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\AutoCAD 2015\accoremgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="acdbmgd">
-      <HintPath>..\..\..\..\..\Program Files\Autodesk\AutoCAD 2015\acdbmgd.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\AutoCAD 2015\acdbmgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="acmgd">
-      <HintPath>..\..\..\..\..\Program Files\Autodesk\AutoCAD 2015\acmgd.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\AutoCAD 2015\acmgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -68,6 +68,10 @@
     <ProjectReference Include="..\Lab 3 DB\Lab 3 DB.csproj">
       <Project>{0e8347c3-9c1b-4615-b0a4-496904e764f6}</Project>
       <Name>Lab 3 DB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lab 4 Compuertas\Lab 4 Compuertas.csproj">
+      <Project>{ec82d02d-39ff-4751-a70b-fc471ec0ac47}</Project>
+      <Name>Lab 4 Compuertas</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
