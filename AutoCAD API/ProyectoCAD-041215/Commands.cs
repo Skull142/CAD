@@ -71,8 +71,9 @@ namespace ProyectoCAD_041215
         {
             if (this.moviles.Count == 0)
                 return;
-            foreach(Movil m in this.moviles)
+            foreach (Movil m in this.moviles)
             {
+                m.MobilesAround(this.moviles);
                 m.Move();
             }
             this.ctrl_blockTab.PrintVelocity(this.moviles);

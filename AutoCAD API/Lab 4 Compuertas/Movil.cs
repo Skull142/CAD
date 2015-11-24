@@ -1,6 +1,7 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using System;
+using System.Collections.Generic;
 using AutoCADAPI.Lab3;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.EditorInput;
@@ -10,7 +11,9 @@ namespace AutoCADAPI.Lab4
     public class Movil
     {
         Double d = 10;
-        private int dS = 25;
+        int dS = 25;
+        double dPromMin = 600f;
+        double dPromMax = 250f;
         //
         ObjectId line;
         public ObjectId mobile;
@@ -23,9 +26,10 @@ namespace AutoCADAPI.Lab4
         public BlockReference bloque;
         Point3d bloqueCentro;
         //
-        public Vector3d direccion;
+        public Vector3d dir;
         public Vector3d velocity;
         private int pointActualCurve;
+        public float velocityScale = 1f;
 
         public string Data
         {
@@ -52,17 +56,11 @@ namespace AutoCADAPI.Lab4
             this.segmentoActual = this.ruta.GetLineSegment2dAt(segmentoActualIndex);
             Lab3.DBMan.UpdateBlockPosition(new Point3d(this.segmentoActual.StartPoint.X, this.segmentoActual.StartPoint.Y, 0), mobile);
             //
-            Vector3d v = new Vector3d(
-                    this.segmentoActual.EndPoint.X - this.segmentoActual.StartPoint.X,
-                    this.segmentoActual.EndPoint.Y - this.segmentoActual.StartPoint.Y,
-                    0);
-            Lab3.DBMan.UpdateBlockRotation(new Vector2d(v.X, v.Y).Angle, mobile);
-            direccion = v.MultiplyBy(1/this.segmentoActual.Length);
-            //
             AttributeManager attribute = new AttributeManager(mobile);
             this.velocity = new Vector3d(0f, 0f, 0f);
             attribute.SetAttribute("Velocity", this.velocity+" [Kms/hr]");
             pointActualCurve = 0;
+            this.Move();
         }
         public void Move()
         {
@@ -116,8 +114,8 @@ namespace AutoCADAPI.Lab4
                     segmentoActual.EndPoint.Y - segmentoActual.StartPoint.Y,
                     0);
                 v = v.MultiplyBy(1 / this.segmentoActual.Length);
-                this.direccion = v;
-                v = v.MultiplyBy(this.d);
+                this.dir = v;
+                v = v.MultiplyBy(this.d*this.velocityScale);
             }
             else
             {
@@ -127,26 +125,56 @@ namespace AutoCADAPI.Lab4
                    this.bloque.Position.Y - centroCurva.Y,
                    0);
                 PointOnCurve3d[] pts = ruta.GetArcSegmentAt(segmentoActualIndex).GetSamplePoints((int)this.d * this.dS);
-                if (pointActualCurve < (int)this.d * this.dS)
+                if (pointActualCurve < (int)this.d)
                 { 
                     Lab3.DBMan.UpdateBlockPosition(new Point3d(pts[pointActualCurve].Point.X, pts[pointActualCurve].Point.Y, 0), mobile);
                     v = ruta.GetArcSegmentAt(segmentoActualIndex).GetTangent(pts[pointActualCurve].Point).Direction.Negate();
                     pointActualCurve++;
                 }
-                this.direccion = v;
-                v = v.MultiplyBy(this.d*(1-(this.dS/100f)));
+                this.dir = v;
+                v = v.MultiplyBy(this.d*(1-(this.dS/100f))*this.velocityScale);
             }
             this.velocity = v;
-            //
-            AttributeManager attribute = new AttributeManager(mobile);
-            attribute.SetAttribute("Velocity", this.velocity.Length.ToString("N") + " [Kms/hr]");
-            //ed.WriteMessage("{0}\n", attribute.GetAttribute("Velocity"));
             //
             Lab3.DBMan.UpdateBlockRotation(new Vector2d(v.X, v.Y).Angle, mobile);
             if (ruta.GetBulgeAt(segmentoActualIndex) == 0)
             { 
                 Matrix3d matrix = Matrix3d.Displacement(v);
+                ed.WriteMessage("{0}: {1}v\n", this.bloque.Name, this.velocityScale);
                 Lab3.DBMan.Transform(matrix, mobile);
+            }
+        }
+
+        public void MobilesAround( List<Movil> mobiles )
+        {
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            Editor ed = doc.Editor;
+            velocityScale = 1f;
+            float vsAux = 1f; 
+            foreach (Movil m in mobiles)
+            {
+                Vector3d vDir = m.bloque.Position - this.bloque.Position;
+                if (vDir.Length < dPromMin && vDir.Length > 0)
+                {
+                    if (this.dir.GetAngleTo(vDir) < (Math.PI / 3))
+                    {
+                        if (vDir.Length <= this.dPromMax)
+                            vsAux = 0.001f;
+                        else
+                        {
+                            if (vDir.Length <= (this.dPromMin - this.dPromMax)*0.5f)
+                                vsAux = 0.25f;
+                            else
+                            {
+                                if (vDir.Length <= (this.dPromMin - this.dPromMax) * 0.8f)
+                                    vsAux = 0.4f;
+                            }
+                        }
+                        ed.WriteMessage("{0}:{1}° {2}vM {3}vS\n", this.bloque.Name, (this.dir.GetAngleTo(vDir) * (180 / Math.PI)).ToString("N"), vDir.Length.ToString("N"), this.velocityScale);
+                    }
+                }
+                if (this.velocityScale > vsAux)
+                    this.velocityScale = vsAux;
             }
         }
     }

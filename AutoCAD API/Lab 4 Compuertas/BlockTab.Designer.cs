@@ -89,7 +89,7 @@
             this.bVelocidades.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bVelocidades.FormattingEnabled = true;
             this.bVelocidades.Name = "bVelocidades";
-            this.bVelocidades.Sorted = true;
+            this.bVelocidades.SelectedIndexChanged += new System.EventHandler(this.bVelocidades_SelectedIndexChanged);
             // 
             // BlockTab
             // 

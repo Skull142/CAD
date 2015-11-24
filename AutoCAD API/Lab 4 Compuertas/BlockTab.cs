@@ -92,6 +92,10 @@ namespace AutoCADAPI.Lab4
             this.bVelocidades.Visible = state;
             this.bVelocidades.Enabled = state;
         }
-        
+
+        private void bVelocidades_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
