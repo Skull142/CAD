@@ -60,7 +60,7 @@ namespace ProyectoCAD_041215
                     AttributeManager attMan = new AttributeManager(id);
                     //
                     this.moviles.Add(new Movil(ref rutaId, ref id));
-                    this.moviles[this.moviles.Count-1].attribute.SetAttribute("ID", "Movil" + this.moviles.Count);
+                    attMan.SetAttribute("ID", "Movil" + this.moviles.Count);
                     //
                     this.ctrl_blockTab.PrintVelocity(this.moviles);
                 }

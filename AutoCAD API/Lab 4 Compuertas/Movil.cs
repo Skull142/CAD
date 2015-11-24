@@ -10,6 +10,7 @@ namespace AutoCADAPI.Lab4
     public class Movil
     {
         Double d = 10;
+        private int dS = 25;
         //
         ObjectId line;
         public ObjectId mobile;
@@ -19,13 +20,22 @@ namespace AutoCADAPI.Lab4
         public int segmentoActualIndex;
         int numeroSegmentos;
         //
-        BlockReference bloque;
+        public BlockReference bloque;
         Point3d bloqueCentro;
         //
-        public AttributeManager attribute;
-        public double velocity;
+        public Vector3d direccion;
+        public Vector3d velocity;
+        private int pointActualCurve;
 
-
+        public string Data
+        {
+            get
+            {
+                AttributeManager attribute = new AttributeManager(mobile);
+                //return attribute.GetAttribute("ID").ToString() + ": " + velocity.ToString() + " [Kms/hr]";
+                return this.bloque.Name + ": " + this.velocity.Length.ToString("N") + " [Kms/hr]";
+            }
+        }
         public Movil(ref ObjectId line, ref ObjectId mobile)
         {
             this.line = line;
@@ -42,14 +52,24 @@ namespace AutoCADAPI.Lab4
             this.segmentoActual = this.ruta.GetLineSegment2dAt(segmentoActualIndex);
             Lab3.DBMan.UpdateBlockPosition(new Point3d(this.segmentoActual.StartPoint.X, this.segmentoActual.StartPoint.Y, 0), mobile);
             //
-            this.attribute = new AttributeManager(mobile);
-            this.velocity = 0f;
-            this.attribute.SetAttribute("Velocity", this.velocity+" [Kms/hr]");
+            Vector3d v = new Vector3d(
+                    this.segmentoActual.EndPoint.X - this.segmentoActual.StartPoint.X,
+                    this.segmentoActual.EndPoint.Y - this.segmentoActual.StartPoint.Y,
+                    0);
+            Lab3.DBMan.UpdateBlockRotation(new Vector2d(v.X, v.Y).Angle, mobile);
+            direccion = v.MultiplyBy(1/this.segmentoActual.Length);
+            //
+            AttributeManager attribute = new AttributeManager(mobile);
+            this.velocity = new Vector3d(0f, 0f, 0f);
+            attribute.SetAttribute("Velocity", this.velocity+" [Kms/hr]");
+            pointActualCurve = 0;
         }
         public void Move()
         {
             Document doc = Application.DocumentManager.MdiActiveDocument;
             Editor ed = doc.Editor;
+            //
+            ApplyTransforms();
             //
             if (line.IsValid && mobile.IsValid)
             {
@@ -58,6 +78,7 @@ namespace AutoCADAPI.Lab4
                     segmentoActualIndex++;
                     if (segmentoActualIndex + 1 > numeroSegmentos)
                     {
+                        pointActualCurve = 0;
                         segmentoActualIndex = 0;
                         //ed.WriteMessage("REINICIO!. {0} de {1}\n", segmentoActualIndex + 1, numeroSegmentos);
                         segmentoActual = this.ruta.GetLineSegment2dAt(segmentoActualIndex);
@@ -67,19 +88,16 @@ namespace AutoCADAPI.Lab4
                     else
                     {
                         //ed.WriteMessage("iNCREMENTANDO!. {0} de {1}\n", segmentoActualIndex + 1, numeroSegmentos);
+                        pointActualCurve = 0;
                         segmentoActual = this.ruta.GetLineSegment2dAt(segmentoActualIndex);
                         Lab3.DBMan.UpdateBlockPosition(new Point3d(this.segmentoActual.StartPoint.X, this.segmentoActual.StartPoint.Y, 0), mobile);
                     }
-                    //ed.WriteMessage("{0}", segmentoActualIndex);
                 }
                 //else
                 //{
                     //ed.WriteMessage("MOVIENDOSE!. {0} de {1}\n", segmentoActualIndex + 1, numeroSegmentos);
                 //}
-                ApplyTransforms();
                 //
-                //ed.WriteMessage("{0}\n", bloque.Position.DistanceTo(new Point3d(segmentoActual.EndPoint.X, segmentoActual.EndPoint.Y, 0)));
-
             }
         }
 
@@ -87,61 +105,48 @@ namespace AutoCADAPI.Lab4
         {
             Document doc = Application.DocumentManager.MdiActiveDocument;
             Editor ed = doc.Editor;
-            //Vector de movimiento
+            //ed.WriteMessage("{0}\n", this.direccion.ToString());
             Vector3d v;
-            Point3d centroCurva;
-            if (ruta.GetBulgeAt(segmentoActualIndex) == 0 )
+            if (ruta.GetBulgeAt(segmentoActualIndex) == 0)
             {
+                if (pointActualCurve > 0)
+                    pointActualCurve = 0;
                 v = new Vector3d(
                     segmentoActual.EndPoint.X - segmentoActual.StartPoint.X,
                     segmentoActual.EndPoint.Y - segmentoActual.StartPoint.Y,
                     0);
-                //ed.WriteMessage("1: {0}\n", v);
-                //Hago unitario a mi vector
-                v = v.MultiplyBy(1 / segmentoActual.Length);
-                //ed.WriteMessage("2: {0}\n", v);
-                v = v.MultiplyBy(d);
-                //ed.WriteMessage("3: {0}\n", v);
+                v = v.MultiplyBy(1 / this.segmentoActual.Length);
+                this.direccion = v;
+                v = v.MultiplyBy(this.d);
             }
             else
             {
-                centroCurva = ruta.GetArcSegmentAt(segmentoActualIndex).Center;
+                Point3d centroCurva = ruta.GetArcSegmentAt(segmentoActualIndex).Center;
                 v = new Vector3d(
-                   bloque.Position.X - centroCurva.X,
-                   bloque.Position.Y - centroCurva.Y,
+                   this.bloque.Position.X - centroCurva.X,
+                   this.bloque.Position.Y - centroCurva.Y,
                    0);
-                v = v.GetPerpendicularVector();
-                //ed.WriteMessage("1: {0}\n", v);
-                v = v.MultiplyBy(d*0.60f);
-                //ed.WriteMessage("2: {0}\n", v);
-                //v = v.MultiplyBy(1/d);
+                PointOnCurve3d[] pts = ruta.GetArcSegmentAt(segmentoActualIndex).GetSamplePoints((int)this.d * this.dS);
+                if (pointActualCurve < (int)this.d * this.dS)
+                { 
+                    Lab3.DBMan.UpdateBlockPosition(new Point3d(pts[pointActualCurve].Point.X, pts[pointActualCurve].Point.Y, 0), mobile);
+                    v = ruta.GetArcSegmentAt(segmentoActualIndex).GetTangent(pts[pointActualCurve].Point).Direction.Negate();
+                    pointActualCurve++;
+                }
+                this.direccion = v;
+                v = v.MultiplyBy(this.d*(1-(this.dS/100f)));
             }
-            velocity = v.Length;
-            this.attribute.SetAttribute("Velocity", this.velocity + " [Kms/hr]");
-            //Crear una matriz de transformación
-            Matrix3d matrix = Matrix3d.Displacement(v);
-            Matrix3d rotMatrix =
-                Matrix3d.Rotation(new Vector2d(v.X, v.Y).Angle, Vector3d.ZAxis, bloqueCentro);
-
-            //Modo 2 Rotando el bloque a la dirección del vector de ruta.
+            this.velocity = v;
+            //
+            AttributeManager attribute = new AttributeManager(mobile);
+            attribute.SetAttribute("Velocity", this.velocity.Length.ToString("N") + " [Kms/hr]");
+            //ed.WriteMessage("{0}\n", attribute.GetAttribute("Velocity"));
+            //
             Lab3.DBMan.UpdateBlockRotation(new Vector2d(v.X, v.Y).Angle, mobile);
-            //Realizo la transformación del vehiculo
-            Lab3.DBMan.Transform(matrix, mobile);
-           
-        }
-        public void MoveCycle()
-        {
-            while( true )
-            {
-                Move();
-                System.Threading.Thread.Sleep(1000);
-            }
-        }
-        public string Data
-        {
-            get
-            {
-                return this.attribute.GetAttribute("ID").ToString() + ": " + this.attribute.GetAttribute("Velocidad").ToString();
+            if (ruta.GetBulgeAt(segmentoActualIndex) == 0)
+            { 
+                Matrix3d matrix = Matrix3d.Displacement(v);
+                Lab3.DBMan.Transform(matrix, mobile);
             }
         }
     }

@@ -75,6 +75,7 @@ namespace AutoCADAPI.Lab4
             }
             return att != null;
         }
+        
         public void SetAttribute(String att, String value)
         {
             Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
