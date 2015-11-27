@@ -48,7 +48,7 @@ namespace ProyectoCAD_041215
             if (this.ctrl_blockTab == null)
                 return;
             String pth = System.IO.Path.Combine(this.ctrl_blockTab.Directory_Path,
-                this.ctrl_blockTab.Blockname);
+                "vehicle.dwg");
 
             if (File.Exists(pth))
             {
@@ -60,7 +60,7 @@ namespace ProyectoCAD_041215
                     ObjectId id = blkMan.Insert(Point3d.Origin);
                     AttributeManager attMan = new AttributeManager(id);
                     //
-                    this.moviles.Add(new Movil(ref rutaId, ref id));
+                    this.moviles.Add(new Movil(ref rutaId, ref id, double.Parse(StringNull(this.ctrl_blockTab.tbMin.Text)), double.Parse(StringNull(this.ctrl_blockTab.tbMax.Text))));
                     attMan.SetAttribute("ID", "Movil" + this.moviles.Count);
                     //
                     this.ctrl_blockTab.PrintValues(this.moviles,this.semaforos);
@@ -83,9 +83,11 @@ namespace ProyectoCAD_041215
                 if (Selector.Point("Selecciona el lugar a colorcarlo (Point3D)", out pos))
                 {
                     blkMan.Load();
-                    pos = new Point3d(pos.X, pos.Y, 10f);
+                    pos = new Point3d(pos.X, pos.Y, float.Parse(StringNull( this.ctrl_blockTab.tbZpos.Text) ));
                     ObjectId id = blkMan.Insert( pos );
-                    this.semaforos.Add( new Semaforo( ref id, 20, 5) );
+                    this.semaforos.Add( new Semaforo( ref id, int.Parse(StringNull( this.ctrl_blockTab.tbStopGo.Text )), int.Parse( StringNull( this.ctrl_blockTab.tbCaution.Text) ) ));
+                    //
+                    this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
                 }
             }
         }
@@ -104,6 +106,24 @@ namespace ProyectoCAD_041215
                 s.Update();
             }
             this.ctrl_blockTab.PrintValues( this.moviles, this.semaforos );
+        }
+
+        [CommandMethod("CambiarParametroExternos")]
+        public void CambiarParametrosExternos()
+        {
+            foreach (Movil m in this.moviles)
+            {
+                m.ChangeExternValues(double.Parse(StringNull(this.ctrl_blockTab.tbMin.Text)), double.Parse(StringNull(this.ctrl_blockTab.tbMax.Text)));
+            }
+            foreach (Semaforo s in this.semaforos)
+            {
+                s.ChangeExternValues( int.Parse(StringNull( this.ctrl_blockTab.tbStopGo.Text) ), int.Parse(StringNull( this.ctrl_blockTab.tbCaution.Text) ), float.Parse(StringNull( this.ctrl_blockTab.tbZpos.Text) ));
+            }
+        }
+
+        string StringNull(string s)
+        {
+            return s.Equals("") ? "0" : s;
         }
     }
 }

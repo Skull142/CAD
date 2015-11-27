@@ -19,6 +19,7 @@ namespace AutoCADAPI.Lab4
     {
         public EstadoSemaforo state;
         public ObjectId id;
+        public BlockReference block;
         private int changeStateLimit;
         private int changeStateLimitPrecaution;
         private int count;
@@ -39,6 +40,7 @@ namespace AutoCADAPI.Lab4
         public Semaforo(ref ObjectId id, int changeStateLimit, int changeStateLimitPrecaution)
         {
             this.id = id;
+            this.block = Lab3.DBMan.OpenEnity(id) as BlockReference;
             this.state = EstadoSemaforo.alto;
             this.changeStateLimit = changeStateLimit;
             this.changeStateLimitPrecaution = changeStateLimitPrecaution;
@@ -55,19 +57,28 @@ namespace AutoCADAPI.Lab4
         public void Update()
         {
             this.count++;
-            if (this.count >= this.changeStateLimitPrecaution && this.state == EstadoSemaforo.precaucion)
-                this.state = EstadoSemaforo.alto;
-            else
+            if (this.count >= this.changeStateLimitPrecaution && this.state.Equals(EstadoSemaforo.precaucion))
             {
-                if (this.count >= this.changeStateLimit)
-                {
-                    this.count = 0;
-                    if (this.state == EstadoSemaforo.alto)
-                        this.state = EstadoSemaforo.siga;
-                    if (this.state == EstadoSemaforo.siga)
-                        this.state = EstadoSemaforo.precaucion;
-                }
+                this.state = EstadoSemaforo.alto;
+                this.count = 0;
             }
+            if (this.count >= this.changeStateLimit && this.state.Equals(EstadoSemaforo.alto))
+            {
+                this.state = EstadoSemaforo.siga;
+                this.count = 0;
+            }
+            if (this.count >= this.changeStateLimit && this.state.Equals(EstadoSemaforo.siga))
+            {
+                this.state = EstadoSemaforo.precaucion;
+                this.count = 0;
+            }
+        }
+
+        public void ChangeExternValues( int changeStateLimit, int changeStateLimitPrecaution, double Zpos)
+        {
+            this.changeStateLimit = changeStateLimit;
+            this.changeStateLimitPrecaution = changeStateLimitPrecaution;
+            Lab3.DBMan.UpdateBlockPosition( new Point3d(this.block.Position.X, this.block.Position.Y,Zpos),this.id);
         }
 
     }

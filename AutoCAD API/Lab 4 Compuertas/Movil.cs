@@ -13,8 +13,8 @@ namespace AutoCADAPI.Lab4
         Double d = 10;
         private float vMax = 50;
         int dS = 25;
-        double dPromMin = 600f;
-        double dPromMax = 250f;
+        public double dPromMin;
+        public double dPromMax;
         //
         ObjectId line;
         public ObjectId mobile;
@@ -41,10 +41,12 @@ namespace AutoCADAPI.Lab4
                 return this.bloque.Name + ": " + ( this.velocityScale < 0.001 ? "0":(this.velocity.Length*(this.vMax/this.d)).ToString("N") ) + " [Km/hr]";
             }
         }
-        public Movil(ref ObjectId line, ref ObjectId mobile)
+        public Movil(ref ObjectId line, ref ObjectId mobile, double minSeparation, double maxSeparation)
         {
             this.line = line;
             this.mobile = mobile;
+            this.dPromMin = minSeparation;
+            this.dPromMax = maxSeparation;
             this.ruta = Lab3.DBMan.OpenEnity(line) as Polyline;
             this.bloque = Lab3.DBMan.OpenEnity(mobile) as BlockReference;
             this.bloqueCentro = new Point3d((bloque.GeometricExtents.MinPoint.X +
@@ -175,12 +177,17 @@ namespace AutoCADAPI.Lab4
                                     vsAux = 0.4f;
                             }
                         }
-                        ed.WriteMessage("{0}:{1}° {2}vM {3}vS\n", this.bloque.Name, (this.dir.GetAngleTo(vDir) * (180 / Math.PI)).ToString("N"), vDir.Length.ToString("N"), this.velocityScale);
+                        //ed.WriteMessage("{0}:{1}° {2}vM {3}vS\n", this.bloque.Name, (this.dir.GetAngleTo(vDir) * (180 / Math.PI)).ToString("N"), vDir.Length.ToString("N"), this.velocityScale);
                     }
                 }
                 if (this.velocityScale > vsAux)
                     this.velocityScale = vsAux;
             }
+        }
+        public void ChangeExternValues(double minSeparation, double maxSeparation)
+        {
+            this.dPromMin = minSeparation;
+            this.dPromMax = maxSeparation;
         }
     }
 }

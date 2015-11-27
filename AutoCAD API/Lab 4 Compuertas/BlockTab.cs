@@ -31,6 +31,7 @@ namespace AutoCADAPI.Lab4
         public BlockTab()
         {
             InitializeComponent();
+            this.Directory_Path = "NULL";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -46,7 +47,7 @@ namespace AutoCADAPI.Lab4
                     if (f.Extension.ToUpper().Contains("DWG"))
                         this.listOfBlocks.Items.Add(f.Name);
                 }
-                if (this.listOfBlocks.Items.Count > 0)
+                if (this.listOfBlocks.Items.Count > 0 && !this.Directory_Path.Equals("NULL"))
                     HidesState(true);
                 else
                     HidesState(false);
@@ -65,18 +66,25 @@ namespace AutoCADAPI.Lab4
             if (mobiles.Count == 0)
             {
                 VelocityState(false);
-                DinamicState(false);
-                return;
+                UpdateState(false);
             }
-            VelocityState(true);
-            DinamicState(true);
-            this.lContent.Text = string.Format("Moviles: {0}\nSemaforos: {1}",mobiles.Count, semaforos.Count);
+            else
+            {
+                VelocityState(true);
+                UpdateState(true);
+            }
+            this.lContent.Text = string.Format("Vehicles: {0}\nTraffic Lights: {1}\nPaths: {2}", mobiles.Count, semaforos.Count, 0);
             this.bVelocidades.Items.Clear();
             foreach (Movil m in mobiles)
             {
                 this.bVelocidades.Items.Add(m.Data);
             }
+            //
             this.bSemaforos.Items.Clear();
+            if (semaforos.Count == 0)
+                TrafficlightState(false);
+            else
+                TrafficlightState(true);
             foreach (Semaforo s in semaforos)
             {
                 this.bSemaforos.Items.Add(s.Data);
@@ -90,6 +98,10 @@ namespace AutoCADAPI.Lab4
             this.lOculto.Visible = state;
             this.listOfBlocks.Enabled = state;
             this.listOfBlocks.Visible = state;
+            this.bInsertVehicle.Visible = state;
+            this.bInsertVehicle.Enabled = state;
+            this.bTlights.Visible = state;
+            this.bTlights.Enabled = state;
         }
         //ETIQUETAS DEL BLOQUE DE VELOCIDADES
         void VelocityState(bool state)
@@ -97,11 +109,17 @@ namespace AutoCADAPI.Lab4
             this.lVelocidad.Visible = state;
             this.bVelocidades.Visible = state;
             this.bVelocidades.Enabled = state;
+
+        }
+        void TrafficlightState(bool state)
+        {
+            this.lTLights.Visible = state;
             this.bSemaforos.Visible = state;
             this.bSemaforos.Enabled = state;
         }
+
         //ETIQUETAS DE CONTENIDO Y UPDATE
-        void DinamicState(bool state)
+        void UpdateState(bool state)
         {
             this.bUpdate.Enabled = state;
             this.bUpdate.Visible = state;
@@ -121,12 +139,42 @@ namespace AutoCADAPI.Lab4
             //Agrego el using renombrando la clase aplicación
             //using AcadApp = Autodesk.AutoCAD.ApplicationServices.Application;
             doc = AcadApp.DocumentManager.MdiActiveDocument;
-            doc.SendStringToExecute(name+" ", true, false, false);
+            doc.SendStringToExecute(name + " ", true, false, false);
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
             this.MethodToExecute("InsertaSemaforo");
+        }
+
+        private void bInsertVehicle_Click(object sender, EventArgs e)
+        {
+            this.MethodToExecute("InsertaVehiculo");
+        }
+
+        private void tbCaution_TextChanged(object sender, EventArgs e)
+        {
+            this.MethodToExecute("CambiarParametroExternos");
+        }
+
+        private void tbStopGo_TextChanged(object sender, EventArgs e)
+        {
+            this.MethodToExecute("CambiarParametroExternos");
+        }
+
+        private void tbZpos_TextChanged(object sender, EventArgs e)
+        {
+            this.MethodToExecute("CambiarParametroExternos");
+        }
+
+        private void tbMin_TextChanged(object sender, EventArgs e)
+        {
+            this.MethodToExecute("CambiarParametroExternos");
+        }
+
+        private void tbMax_TextChanged(object sender, EventArgs e)
+        {
+            this.MethodToExecute("CambiarParametroExternos");
         }
     }
 }
