@@ -26,13 +26,14 @@ namespace ProyectoCAD_041215
         BlockTab ctrl_blockTab;
         //
         List<Movil> moviles = new List<Movil>();
+        List<Semaforo> semaforos = new List<Semaforo>();
 
         [CommandMethod("GUI")]
         public void loadUI()
         {
             if (blockTab == null)
             {
-                this.mipaleta = new PaletteSet("Evaluador de Semaforo");
+                this.mipaleta = new PaletteSet("Evaluador de Transito");
                 this.ctrl_blockTab = new BlockTab();
                 this.blockTab = this.mipaleta.Add("Insertar", this.ctrl_blockTab);
                 this.mipaleta.Visible = true;
@@ -41,7 +42,7 @@ namespace ProyectoCAD_041215
                 this.mipaleta.Visible = !this.mipaleta.Visible;
         }
         [CommandMethod("InsertaVehiculo")]
-        public void InsertCompuerta()
+        public void InsertVehiculo()
         {
             //validar la carga de la interfaz
             if (this.ctrl_blockTab == null)
@@ -62,11 +63,33 @@ namespace ProyectoCAD_041215
                     this.moviles.Add(new Movil(ref rutaId, ref id));
                     attMan.SetAttribute("ID", "Movil" + this.moviles.Count);
                     //
-                    this.ctrl_blockTab.PrintVelocity(this.moviles);
+                    this.ctrl_blockTab.PrintValues(this.moviles,this.semaforos);
                 }
             }
         }
-        [CommandMethod("MoverMoviler")]
+        [CommandMethod("InsertaSemaforo")]
+        public void InsertSemaforo()
+        {
+            //validar la carga de la interfaz
+            if (this.ctrl_blockTab == null)
+                return;
+            String pth = System.IO.Path.Combine(this.ctrl_blockTab.Directory_Path,
+                "trafficLight.dwg");
+
+            if (File.Exists(pth))
+            {
+                BlockManager blkMan = new BlockManager(pth);
+                Point3d pos;
+                if (Selector.Point("Selecciona el lugar a colorcarlo (Point3D)", out pos))
+                {
+                    blkMan.Load();
+                    pos = new Point3d(pos.X, pos.Y, 10f);
+                    ObjectId id = blkMan.Insert( pos );
+                    this.semaforos.Add( new Semaforo( ref id, 20, 5) );
+                }
+            }
+        }
+        [CommandMethod("MoverMoviles")]
         public void MoverMoviles()
         {
             if (this.moviles.Count == 0)
@@ -76,7 +99,11 @@ namespace ProyectoCAD_041215
                 m.MobilesAround(this.moviles);
                 m.Move();
             }
-            this.ctrl_blockTab.PrintVelocity(this.moviles);
+            foreach (Semaforo s in this.semaforos)
+            {
+                s.Update();
+            }
+            this.ctrl_blockTab.PrintValues( this.moviles, this.semaforos );
         }
     }
 }

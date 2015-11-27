@@ -70,6 +70,7 @@
     <Compile Include="Movil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Compuerta.cs" />
+    <Compile Include="Semaforo.cs" />
     <Compile Include="Volado.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -36,7 +36,11 @@
             this.button2 = new System.Windows.Forms.Button();
             this.lOculto = new System.Windows.Forms.Label();
             this.lVelocidad = new System.Windows.Forms.Label();
+            this.bUpdate = new System.Windows.Forms.Button();
+            this.lContent = new System.Windows.Forms.Label();
             this.bVelocidades = new System.Windows.Forms.ListBox();
+            this.bSemaforos = new System.Windows.Forms.ListBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -83,20 +87,51 @@
             resources.ApplyResources(this.lVelocidad, "lVelocidad");
             this.lVelocidad.Name = "lVelocidad";
             // 
+            // bUpdate
+            // 
+            resources.ApplyResources(this.bUpdate, "bUpdate");
+            this.bUpdate.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.bUpdate.Name = "bUpdate";
+            this.bUpdate.UseVisualStyleBackColor = true;
+            this.bUpdate.Click += new System.EventHandler(this.bUpdate_Click);
+            // 
+            // lContent
+            // 
+            resources.ApplyResources(this.lContent, "lContent");
+            this.lContent.Name = "lContent";
+            // 
             // bVelocidades
             // 
             resources.ApplyResources(this.bVelocidades, "bVelocidades");
             this.bVelocidades.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bVelocidades.FormattingEnabled = true;
             this.bVelocidades.Name = "bVelocidades";
-            this.bVelocidades.SelectedIndexChanged += new System.EventHandler(this.bVelocidades_SelectedIndexChanged);
+            // 
+            // bSemaforos
+            // 
+            resources.ApplyResources(this.bSemaforos, "bSemaforos");
+            this.bSemaforos.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.bSemaforos.FormattingEnabled = true;
+            this.bSemaforos.Name = "bSemaforos";
+            // 
+            // button1
+            // 
+            resources.ApplyResources(this.button1, "button1");
+            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.Name = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // BlockTab
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             resources.ApplyResources(this, "$this");
-            this.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.bSemaforos);
+            this.Controls.Add(this.lContent);
+            this.Controls.Add(this.bUpdate);
             this.Controls.Add(this.bVelocidades);
             this.Controls.Add(this.lVelocidad);
             this.Controls.Add(this.lOculto);
@@ -120,6 +155,10 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label lOculto;
         private System.Windows.Forms.Label lVelocidad;
+        private System.Windows.Forms.Button bUpdate;
+        private System.Windows.Forms.Label lContent;
         private System.Windows.Forms.ListBox bVelocidades;
+        private System.Windows.Forms.ListBox bSemaforos;
+        private System.Windows.Forms.Button button1;
     }
 }

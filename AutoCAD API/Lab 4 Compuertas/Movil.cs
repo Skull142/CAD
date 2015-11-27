@@ -11,6 +11,7 @@ namespace AutoCADAPI.Lab4
     public class Movil
     {
         Double d = 10;
+        private float vMax = 50;
         int dS = 25;
         double dPromMin = 600f;
         double dPromMax = 250f;
@@ -37,7 +38,7 @@ namespace AutoCADAPI.Lab4
             {
                 AttributeManager attribute = new AttributeManager(mobile);
                 //return attribute.GetAttribute("ID").ToString() + ": " + velocity.ToString() + " [Kms/hr]";
-                return this.bloque.Name + ": " + this.velocity.Length.ToString("N") + " [Kms/hr]";
+                return this.bloque.Name + ": " + ( this.velocityScale < 0.001 ? "0":(this.velocity.Length*(this.vMax/this.d)).ToString("N") ) + " [Km/hr]";
             }
         }
         public Movil(ref ObjectId line, ref ObjectId mobile)
@@ -59,7 +60,8 @@ namespace AutoCADAPI.Lab4
             AttributeManager attribute = new AttributeManager(mobile);
             this.velocity = new Vector3d(0f, 0f, 0f);
             attribute.SetAttribute("Velocity", this.velocity+" [Kms/hr]");
-            pointActualCurve = 0;
+            //
+            this.pointActualCurve = 0;
             this.Move();
         }
         public void Move()
@@ -115,7 +117,7 @@ namespace AutoCADAPI.Lab4
                     0);
                 v = v.MultiplyBy(1 / this.segmentoActual.Length);
                 this.dir = v;
-                v = v.MultiplyBy(this.d*this.velocityScale);
+                v = v.MultiplyBy( this.d * this.velocityScale);
             }
             else
             {
@@ -124,23 +126,26 @@ namespace AutoCADAPI.Lab4
                    this.bloque.Position.X - centroCurva.X,
                    this.bloque.Position.Y - centroCurva.Y,
                    0);
-                PointOnCurve3d[] pts = ruta.GetArcSegmentAt(segmentoActualIndex).GetSamplePoints((int)this.d * this.dS);
-                if (pointActualCurve < (int)this.d)
+                PointOnCurve3d[] pts = ruta.GetArcSegmentAt(segmentoActualIndex).GetSamplePoints( (int)(this.d * this.dS) );
+                if (pointActualCurve < (int)(this.d * this.dS) && this.velocityScale >= 1f)
                 { 
                     Lab3.DBMan.UpdateBlockPosition(new Point3d(pts[pointActualCurve].Point.X, pts[pointActualCurve].Point.Y, 0), mobile);
                     v = ruta.GetArcSegmentAt(segmentoActualIndex).GetTangent(pts[pointActualCurve].Point).Direction.Negate();
                     pointActualCurve++;
                 }
+                else
+                    v = ruta.GetArcSegmentAt(segmentoActualIndex).GetTangent(pts[pointActualCurve].Point).Direction.Negate();
                 this.dir = v;
-                v = v.MultiplyBy(this.d*(1-(this.dS/100f))*this.velocityScale);
+                v = v.MultiplyBy( this.d*(1-(this.dS/100f)) * this.velocityScale);
             }
+            //
             this.velocity = v;
             //
             Lab3.DBMan.UpdateBlockRotation(new Vector2d(v.X, v.Y).Angle, mobile);
             if (ruta.GetBulgeAt(segmentoActualIndex) == 0)
             { 
-                Matrix3d matrix = Matrix3d.Displacement(v);
-                ed.WriteMessage("{0}: {1}v\n", this.bloque.Name, this.velocityScale);
+                Matrix3d matrix = Matrix3d.Displacement( v );
+                //ed.WriteMessage("{0}: {1}v\n", this.bloque.Name, this.velocityScale);
                 Lab3.DBMan.Transform(matrix, mobile);
             }
         }
@@ -159,7 +164,7 @@ namespace AutoCADAPI.Lab4
                     if (this.dir.GetAngleTo(vDir) < (Math.PI / 3))
                     {
                         if (vDir.Length <= this.dPromMax)
-                            vsAux = 0.001f;
+                            vsAux = 0.00001f;
                         else
                         {
                             if (vDir.Length <= (this.dPromMin - this.dPromMax)*0.5f)

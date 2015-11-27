@@ -130,7 +130,7 @@
     <value>Consolas, 12pt</value>
   </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>76, 21</value>
+    <value>103, 37</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
     <value>126, 19</value>
@@ -154,7 +154,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>11</value>
   </data>
   <data name="lVehiculos.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -163,13 +163,13 @@
     <value>True</value>
   </data>
   <data name="lVehiculos.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9.75pt</value>
+    <value>Consolas, 8.25pt</value>
   </data>
   <data name="lVehiculos.Location" type="System.Drawing.Point, System.Drawing">
-    <value>57, 106</value>
+    <value>94, 136</value>
   </data>
   <data name="lVehiculos.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 30</value>
+    <value>139, 26</value>
   </data>
   <data name="lVehiculos.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -194,7 +194,7 @@ a insertar</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lVehiculos.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>10</value>
   </data>
   <data name="listOfBlocks.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -212,7 +212,7 @@ a insertar</value>
     <value>14</value>
   </data>
   <data name="listOfBlocks.Location" type="System.Drawing.Point, System.Drawing">
-    <value>24, 142</value>
+    <value>46, 169</value>
   </data>
   <data name="listOfBlocks.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
     <value>No</value>
@@ -236,7 +236,7 @@ a insertar</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;listOfBlocks.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>9</value>
   </data>
   <data name="cVehiculos.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -251,16 +251,16 @@ a insertar</value>
     <value>Consolas, 8.25pt</value>
   </data>
   <data name="cVehiculos.Location" type="System.Drawing.Point, System.Drawing">
-    <value>142, 56</value>
+    <value>173, 72</value>
   </data>
   <data name="cVehiculos.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 23</value>
+    <value>83, 23</value>
   </data>
   <data name="cVehiculos.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
   <data name="cVehiculos.Text" xml:space="preserve">
-    <value>Cargar Assets</value>
+    <value>Load Assets</value>
   </data>
   <data name="&gt;&gt;cVehiculos.Name" xml:space="preserve">
     <value>cVehiculos</value>
@@ -272,7 +272,7 @@ a insertar</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cVehiculos.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>8</value>
   </data>
   <data name="button2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -287,16 +287,16 @@ a insertar</value>
     <value>Consolas, 8.25pt</value>
   </data>
   <data name="button2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>43, 56</value>
+    <value>60, 72</value>
   </data>
   <data name="button2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>89, 23</value>
+    <value>77, 23</value>
   </data>
   <data name="button2.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
   <data name="button2.Text" xml:space="preserve">
-    <value>Cargar Scene</value>
+    <value>Load Scene</value>
   </data>
   <data name="&gt;&gt;button2.Name" xml:space="preserve">
     <value>button2</value>
@@ -308,7 +308,7 @@ a insertar</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;button2.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>7</value>
   </data>
   <data name="lOculto.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -317,13 +317,13 @@ a insertar</value>
     <value>True</value>
   </data>
   <data name="lOculto.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9pt</value>
+    <value>Segoe UI, 8.25pt, style=Bold</value>
   </data>
   <data name="lOculto.Location" type="System.Drawing.Point, System.Drawing">
-    <value>59, 244</value>
+    <value>81, 274</value>
   </data>
   <data name="lOculto.Size" type="System.Drawing.Size, System.Drawing">
-    <value>168, 30</value>
+    <value>165, 26</value>
   </data>
   <data name="lOculto.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -349,7 +349,7 @@ que desea insertar
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lOculto.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>6</value>
   </data>
   <data name="lVelocidad.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -358,16 +358,16 @@ que desea insertar
     <value>True</value>
   </data>
   <data name="lVelocidad.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9.75pt</value>
+    <value>Consolas, 8.25pt</value>
   </data>
   <data name="lVelocidad.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="lVelocidad.Location" type="System.Drawing.Point, System.Drawing">
-    <value>64, 312</value>
+    <value>96, 318</value>
   </data>
   <data name="lVelocidad.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 30</value>
+    <value>133, 26</value>
   </data>
   <data name="lVelocidad.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -392,7 +392,95 @@ en pistas (Velocidad)</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lVelocidad.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>5</value>
+  </data>
+  <data name="bUpdate.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="bUpdate.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="bUpdate.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="bUpdate.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="bUpdate.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Consolas, 8.25pt</value>
+  </data>
+  <data name="bUpdate.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bUpdate.Location" type="System.Drawing.Point, System.Drawing">
+    <value>192, 468</value>
+  </data>
+  <data name="bUpdate.Size" type="System.Drawing.Size, System.Drawing">
+    <value>89, 23</value>
+  </data>
+  <data name="bUpdate.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="bUpdate.Text" xml:space="preserve">
+    <value>Update Scene</value>
+  </data>
+  <data name="bUpdate.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;bUpdate.Name" xml:space="preserve">
+    <value>bUpdate</value>
+  </data>
+  <data name="&gt;&gt;bUpdate.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bUpdate.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;bUpdate.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="lContent.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="lContent.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lContent.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Consolas, 8.25pt</value>
+  </data>
+  <data name="lContent.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lContent.Location" type="System.Drawing.Point, System.Drawing">
+    <value>43, 468</value>
+  </data>
+  <data name="lContent.Size" type="System.Drawing.Size, System.Drawing">
+    <value>79, 26</value>
+  </data>
+  <data name="lContent.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="lContent.Text" xml:space="preserve">
+    <value>xyzxyzxyzxyz
+xyz</value>
+  </data>
+  <data name="lContent.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="lContent.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;lContent.Name" xml:space="preserve">
+    <value>lContent</value>
+  </data>
+  <data name="&gt;&gt;lContent.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lContent.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lContent.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="bVelocidades.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -410,10 +498,10 @@ en pistas (Velocidad)</value>
     <value>14</value>
   </data>
   <data name="bVelocidades.Location" type="System.Drawing.Point, System.Drawing">
-    <value>24, 348</value>
+    <value>15, 347</value>
   </data>
   <data name="bVelocidades.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 102</value>
+    <value>148, 102</value>
   </data>
   <data name="bVelocidades.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -431,6 +519,84 @@ en pistas (Velocidad)</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;bVelocidades.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="bSemaforos.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="bSemaforos.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="bSemaforos.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Consolas, 9pt</value>
+  </data>
+  <data name="bSemaforos.HorizontalScrollbar" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="bSemaforos.ItemHeight" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="bSemaforos.Location" type="System.Drawing.Point, System.Drawing">
+    <value>169, 347</value>
+  </data>
+  <data name="bSemaforos.Size" type="System.Drawing.Size, System.Drawing">
+    <value>148, 102</value>
+  </data>
+  <data name="bSemaforos.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="bSemaforos.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;bSemaforos.Name" xml:space="preserve">
+    <value>bSemaforos</value>
+  </data>
+  <data name="&gt;&gt;bSemaforos.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bSemaforos.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;bSemaforos.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="button1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="button1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="button1.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="button1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Consolas, 8.25pt</value>
+  </data>
+  <data name="button1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="button1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>97, 101</value>
+  </data>
+  <data name="button1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>131, 23</value>
+  </data>
+  <data name="button1.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="button1.Text" xml:space="preserve">
+    <value>Insert TrafficLight</value>
+  </data>
+  <data name="&gt;&gt;button1.Name" xml:space="preserve">
+    <value>button1</value>
+  </data>
+  <data name="&gt;&gt;button1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;button1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -440,7 +606,7 @@ en pistas (Velocidad)</value>
     <value>True</value>
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>274, 468</value>
+    <value>332, 540</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>BlockTab</value>

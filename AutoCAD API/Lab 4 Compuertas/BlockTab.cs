@@ -57,28 +57,33 @@ namespace AutoCADAPI.Lab4
 
         private void listOfBlocks_DoubleClick(object sender, EventArgs e)
         {
-            Autodesk.AutoCAD.ApplicationServices.Document doc;
-            //Agrego el using renombrando la clase aplicación
-            //using AcadApp = Autodesk.AutoCAD.ApplicationServices.Application;
-            doc = AcadApp.DocumentManager.MdiActiveDocument;
-            doc.SendStringToExecute("InsertaVehiculo ", true, false, false);
+            this.MethodToExecute("InsertaVehiculo");
         }
 
-        public void PrintVelocity(List<Movil> mobiles)
-        { 
-            if(mobiles.Count == 0)
+        public void PrintValues(List<Movil> mobiles, List<Semaforo> semaforos)
+        {
+            if (mobiles.Count == 0)
             {
                 VelocityState(false);
+                DinamicState(false);
                 return;
             }
             VelocityState(true);
+            DinamicState(true);
+            this.lContent.Text = string.Format("Moviles: {0}\nSemaforos: {1}",mobiles.Count, semaforos.Count);
             this.bVelocidades.Items.Clear();
-            foreach(Movil m in mobiles)
+            foreach (Movil m in mobiles)
             {
                 this.bVelocidades.Items.Add(m.Data);
             }
+            this.bSemaforos.Items.Clear();
+            foreach (Semaforo s in semaforos)
+            {
+                this.bSemaforos.Items.Add(s.Data);
+            }
 
         }
+        //ETIQUETAS PARA EL CONTENIDO DEL BLOQUE DE SELECCIOM
         void HidesState(bool state)
         {
             this.lVehiculos.Visible = state;
@@ -86,16 +91,42 @@ namespace AutoCADAPI.Lab4
             this.listOfBlocks.Enabled = state;
             this.listOfBlocks.Visible = state;
         }
+        //ETIQUETAS DEL BLOQUE DE VELOCIDADES
         void VelocityState(bool state)
         {
             this.lVelocidad.Visible = state;
             this.bVelocidades.Visible = state;
             this.bVelocidades.Enabled = state;
+            this.bSemaforos.Visible = state;
+            this.bSemaforos.Enabled = state;
+        }
+        //ETIQUETAS DE CONTENIDO Y UPDATE
+        void DinamicState(bool state)
+        {
+            this.bUpdate.Enabled = state;
+            this.bUpdate.Visible = state;
+            this.lContent.Visible = state;
         }
 
-        private void bVelocidades_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
+        private void bUpdate_Click(object sender, EventArgs e)
+        {
+            this.MethodToExecute("MoverMoviles");
+        }
+
+
+        public void MethodToExecute(string name)
+        {
+            Autodesk.AutoCAD.ApplicationServices.Document doc;
+            //Agrego el using renombrando la clase aplicación
+            //using AcadApp = Autodesk.AutoCAD.ApplicationServices.Application;
+            doc = AcadApp.DocumentManager.MdiActiveDocument;
+            doc.SendStringToExecute(name+" ", true, false, false);
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            this.MethodToExecute("InsertaSemaforo");
         }
     }
 }
