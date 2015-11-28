@@ -27,6 +27,7 @@ namespace ProyectoCAD_041215
         //
         List<Movil> moviles = new List<Movil>();
         List<Semaforo> semaforos = new List<Semaforo>();
+        List<Polyline> paths = new List<Polyline>();
 
         [CommandMethod("GUI")]
         public void loadUI()
@@ -121,6 +122,47 @@ namespace ProyectoCAD_041215
             }
         }
 
+        [CommandMethod("Enfocar")]
+        public void Focus()
+        {
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            Editor ed = doc.Editor;
+            Point3d pos;
+            if (Selector.Point("Selecciona el lugar a colorcarlo (Point3D)", out pos))
+            { 
+                ViewTableRecord vw = new ViewTableRecord();
+                vw.CenterPoint = new Point2d(pos.X, pos.Y);
+                //vw.Elevation = pos.Z;
+                vw.Height = 10;
+                vw.Width = 10;
+                ed.SetCurrentView(vw);
+            }
+
+        }
+        public void all()
+        {
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            Editor ed = doc.Editor;
+            Database db = doc.Database;
+            ed.SelectAll();
+            using (Transaction tr = db.TransactionManager.StartTransaction())
+            {
+                BlockTableRecord model = db.CurrentSpaceId.GetObject(OpenMode.ForRead) as BlockTableRecord ;
+                foreach (ObjectId id in model)
+                {
+                    DBObject obj = id.GetObject(OpenMode.ForRead);
+
+                    if (obj is Polyline)
+                    {
+                        paths.Add(obj as Polyline);
+                        DManager d = new DManager();
+                        d.AddData(d.AddXRecord(d.AddDictionary(obj.Id, "App"), "Dato"), "ruta", "");
+                        d.Extract(d.Get(d.Get(obj.Id, "App"), "Dato"));
+                    }
+                }
+            }
+        }
+        
         string StringNull(string s)
         {
             return s.Equals("") ? "0" : s;
