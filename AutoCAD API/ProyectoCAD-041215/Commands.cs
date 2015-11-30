@@ -15,26 +15,29 @@ using System.IO;
 using AutoCADAPI.Lab2;
 using AutoCADAPI.Lab3;
 using AutoCADAPI.Lab4;
+using AcadApp = Autodesk.AutoCAD.ApplicationServices.Application;
 
 
 namespace ProyectoCAD_041215
 {
     public class Commands
     {
-        PaletteSet mipaleta;
-        Palette blockTab;
-        BlockTab ctrl_blockTab;
+        private PaletteSet mipaleta;
+        private Palette blockTab;
+        private BlockTab ctrl_blockTab;
         //
-        List<Movil> moviles = new List<Movil>();
-        List<Semaforo> semaforos = new List<Semaforo>();
-        List<Polyline> paths = new List<Polyline>();
+        private List<Movil> moviles = new List<Movil>();
+        private int movilesCounter = 0;
+        private List<Semaforo> semaforos = new List<Semaforo>();
+        private int semaforosCounter = 0;
+        private List<Polyline> paths = new List<Polyline>();
 
         [CommandMethod("GUI")]
-        public void loadUI()
+        public void LoadGUI()
         {
             if (blockTab == null)
             {
-                this.mipaleta = new PaletteSet("Evaluador de Transito");
+                this.mipaleta = new PaletteSet("Traffic Simulator");
                 this.ctrl_blockTab = new BlockTab();
                 this.blockTab = this.mipaleta.Add("Insertar", this.ctrl_blockTab);
                 this.mipaleta.Visible = true;
@@ -42,8 +45,8 @@ namespace ProyectoCAD_041215
             else
                 this.mipaleta.Visible = !this.mipaleta.Visible;
         }
-        [CommandMethod("InsertaVehiculo")]
-        public void InsertVehiculo()
+        [CommandMethod("InsertVehicle")]
+        public void InsertVehicle()
         {
             //validar la carga de la interfaz
             if (this.ctrl_blockTab == null)
@@ -55,21 +58,22 @@ namespace ProyectoCAD_041215
             {
                 BlockManager blkMan = new BlockManager(pth);
                 ObjectId rutaId;
-                if (Selector.ObjectId("Selecciona la ruta (Polyline)", "", typeof(Polyline), out rutaId))
+                if (Selector.ObjectId("Select the Path to insert the Vehicle (Polyline)", "", typeof(Polyline), out rutaId))
                 {
-                    blkMan.Load();
+                    blkMan.Load("V"+this.movilesCounter.ToString("D3"));
                     ObjectId id = blkMan.Insert(Point3d.Origin);
                     AttributeManager attMan = new AttributeManager(id);
                     //
-                    this.moviles.Add(new Movil(ref rutaId, ref id, double.Parse(StringNull(this.ctrl_blockTab.tbMin.Text)), double.Parse(StringNull(this.ctrl_blockTab.tbMax.Text))));
-                    attMan.SetAttribute("ID", "Movil" + this.moviles.Count);
+                    this.moviles.Add(new Movil(ref rutaId, ref id, double.Parse(StringNull(this.ctrl_blockTab.tbMin.Text)), double.Parse(StringNull(this.ctrl_blockTab.tbMax.Text)), moviles.Count));
+                    this.movilesCounter++;
+                    attMan.SetAttribute("ID", "V" + this.moviles.Count);
                     //
-                    this.ctrl_blockTab.PrintValues(this.moviles,this.semaforos);
+                    this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
                 }
             }
         }
-        [CommandMethod("InsertaSemaforo")]
-        public void InsertSemaforo()
+        [CommandMethod("InsertTrafficLight")]
+        public void InsertTrafficLight()
         {
             //validar la carga de la interfaz
             if (this.ctrl_blockTab == null)
@@ -81,25 +85,28 @@ namespace ProyectoCAD_041215
             {
                 BlockManager blkMan = new BlockManager(pth);
                 Point3d pos;
-                if (Selector.Point("Selecciona el lugar a colorcarlo (Point3D)", out pos))
+                if (Selector.Point("Select the point to insert the Traffic Light (Point3D)", out pos))
                 {
-                    blkMan.Load();
+                    blkMan.Load("TL"+this.semaforosCounter.ToString("D3"));
                     pos = new Point3d(pos.X, pos.Y, float.Parse(StringNull( this.ctrl_blockTab.tbZpos.Text) ));
                     ObjectId id = blkMan.Insert( pos );
-                    this.semaforos.Add( new Semaforo( ref id, int.Parse(StringNull( this.ctrl_blockTab.tbStopGo.Text )), int.Parse( StringNull( this.ctrl_blockTab.tbCaution.Text) ) ));
+                    this.semaforos.Add( new Semaforo( ref id, semaforos.Count,int.Parse(StringNull( this.ctrl_blockTab.tbStopGo.Text )), int.Parse( StringNull( this.ctrl_blockTab.tbCaution.Text) ) ));
+                    semaforosCounter++;
                     //
                     this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
                 }
             }
         }
-        [CommandMethod("MoverMoviles")]
-        public void MoverMoviles()
+        [CommandMethod("UpdateScene")]
+        public void UpdateScene()
         {
-            if (this.moviles.Count == 0)
+            if (this.ctrl_blockTab == null)
+                return;
+            if (this.moviles.Count == 0 && this.semaforos.Count == 0)
                 return;
             foreach (Movil m in this.moviles)
             {
-                m.MobilesAround(this.moviles);
+                m.CheckVelocity(this.moviles, this.semaforos);
                 m.Move();
             }
             foreach (Semaforo s in this.semaforos)
@@ -109,22 +116,24 @@ namespace ProyectoCAD_041215
             this.ctrl_blockTab.PrintValues( this.moviles, this.semaforos );
         }
 
-        [CommandMethod("CambiarParametroExternos")]
-        public void CambiarParametrosExternos()
+        [CommandMethod("ChangeExternParameters")]
+        public void ChangeExternParameters()
         {
+            if (this.ctrl_blockTab == null)
+                return;
+            if (this.moviles.Count == 0 && this.semaforos.Count == 0)
+                return;
             foreach (Movil m in this.moviles)
-            {
                 m.ChangeExternValues(double.Parse(StringNull(this.ctrl_blockTab.tbMin.Text)), double.Parse(StringNull(this.ctrl_blockTab.tbMax.Text)));
-            }
             foreach (Semaforo s in this.semaforos)
-            {
                 s.ChangeExternValues( int.Parse(StringNull( this.ctrl_blockTab.tbStopGo.Text) ), int.Parse(StringNull( this.ctrl_blockTab.tbCaution.Text) ), float.Parse(StringNull( this.ctrl_blockTab.tbZpos.Text) ));
-            }
         }
 
-        [CommandMethod("Enfocar")]
+        [CommandMethod("FocusElement")]
         public void Focus()
         {
+            if (this.ctrl_blockTab == null)
+                return;
             Document doc = Application.DocumentManager.MdiActiveDocument;
             Editor ed = doc.Editor;
             Point3d pos;
@@ -138,6 +147,53 @@ namespace ProyectoCAD_041215
                 ed.SetCurrentView(vw);
             }
 
+        }
+        [CommandMethod("DeleteElement")]
+        public void DeleteElement()
+        {
+            if (this.ctrl_blockTab == null)
+                return;
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            Editor ed = doc.Editor;
+            ObjectId obj;
+            if (Selector.ObjectId("OBJ", out obj))
+            {
+                foreach (Movil m in moviles)
+                {
+                    if( m.mobile.Equals(obj) )
+                    {
+                        ed.WriteMessage("{0} Erase!\n",m.bloque.Name);
+                        moviles.Remove(m);
+                        DBMan.Erase(obj);
+                        this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
+                        return;
+                    }
+                }
+                foreach (Semaforo s in semaforos)
+                {
+                    if (s.id.Equals(obj))
+                    {
+                        ed.WriteMessage("{0} Erase!\n", s.block.Name);
+                        semaforos.Remove(s);
+                        DBMan.Erase(obj);
+                        this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
+                        return;
+                    }
+                }
+                ed.WriteMessage("{0} Not is element of the Traffic Simulator System!\n", obj);
+            }
+        }
+        [CommandMethod("LoadScene")]
+        public void LoadScene()
+        {
+            if (this.ctrl_blockTab == null)
+                return;
+            Autodesk.AutoCAD.ApplicationServices.Document doc;
+            //Agrego el using renombrando la clase aplicación
+            //using AcadApp = Autodesk.AutoCAD.ApplicationServices.Application;
+            doc = AcadApp.DocumentManager.MdiActiveDocument;
+            doc.SendStringToExecute("Open ", true, false, false);
+            this.mipaleta.Close();
         }
         public void all()
         {

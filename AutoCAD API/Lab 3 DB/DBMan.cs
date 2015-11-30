@@ -124,6 +124,26 @@ namespace AutoCADAPI.Lab3
                 }
             }
         }
+        public static void Erase(ObjectId id)
+        {
+            Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+            Database dwg = Application.DocumentManager.MdiActiveDocument.Database;
+            using (Transaction tr = dwg.TransactionManager.StartTransaction())
+            {
+                try
+                {
+                    BlockReference blk = (BlockReference)
+                       id.GetObject(OpenMode.ForWrite);
+                    blk.Erase();
+                    tr.Commit();
+                }
+                catch (Exception exc)
+                {
+                    ed.WriteMessage(exc.Message);
+                    tr.Abort();
+                }
+            }
+        }
         public static void UpdateBlockPosition(Point3d point, ObjectId blkId)
         {
             Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;

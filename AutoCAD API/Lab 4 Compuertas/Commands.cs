@@ -114,7 +114,7 @@ namespace AutoCADAPI.Lab4
                    typeof(Polyline), out rutaId);
             Lab2.Selector.ObjectId("Selecciona el movil", "",
                 typeof(BlockReference), out movilId);
-            m = new Movil(ref rutaId, ref movilId,600,300);
+            m = new Movil(ref rutaId, ref movilId,600,300,0);
         }
 
         [CommandMethod("MoveItem2")]
@@ -185,7 +185,7 @@ namespace AutoCADAPI.Lab4
                 Point3d pt;
                 if (Lab2.Selector.Point("Selecciona el punto de inserción", out pt))
                 {
-                    blkMan.Load();
+                    blkMan.Load("Compuerta");
                     ObjectId id = blkMan.Insert(pt);
                     AttributeManager attMan = new AttributeManager(id);
 

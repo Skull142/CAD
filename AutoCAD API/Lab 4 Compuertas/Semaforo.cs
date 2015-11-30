@@ -20,6 +20,7 @@ namespace AutoCADAPI.Lab4
         public EstadoSemaforo state;
         public ObjectId id;
         public BlockReference block;
+        public int indexList;
         private int changeStateLimit;
         private int changeStateLimitPrecaution;
         private int count;
@@ -34,13 +35,14 @@ namespace AutoCADAPI.Lab4
                     aux = "Precaución";
                 if (this.state == EstadoSemaforo.siga)
                     aux = "Siga";
-                return aux;
+                return this.block.Name+":\t"+aux;
             }
         }
-        public Semaforo(ref ObjectId id, int changeStateLimit, int changeStateLimitPrecaution)
+        public Semaforo(ref ObjectId id, int indexList, int changeStateLimit, int changeStateLimitPrecaution)
         {
             this.id = id;
             this.block = Lab3.DBMan.OpenEnity(id) as BlockReference;
+            this.indexList = indexList;
             this.state = EstadoSemaforo.alto;
             this.changeStateLimit = changeStateLimit;
             this.changeStateLimitPrecaution = changeStateLimitPrecaution;

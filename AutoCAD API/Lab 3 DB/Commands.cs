@@ -135,7 +135,7 @@ namespace AutoCADAPI.Lab3
                 blkMan = new BlockManager(file);
                 try
                 {
-                    blkMan.Load();
+                    blkMan.Load("AND");
                     ObjectId refId = blkMan.Insert(insPt);
                     blkMan.CreateBBox(refId);
                     //Dibujar las cajas

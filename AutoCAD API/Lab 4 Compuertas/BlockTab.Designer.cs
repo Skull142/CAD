@@ -32,9 +32,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.lVehiculos = new System.Windows.Forms.Label();
             this.listOfBlocks = new System.Windows.Forms.ListBox();
-            this.cVehiculos = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.lOculto = new System.Windows.Forms.Label();
+            this.bLoadAssets = new System.Windows.Forms.Button();
+            this.bLoadScene = new System.Windows.Forms.Button();
             this.lVelocidad = new System.Windows.Forms.Label();
             this.bUpdate = new System.Windows.Forms.Button();
             this.lContent = new System.Windows.Forms.Label();
@@ -62,8 +61,9 @@
             this.tbCaution = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.label2 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.bDelete = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.ljb.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -91,25 +91,21 @@
             this.listOfBlocks.Sorted = true;
             this.listOfBlocks.DoubleClick += new System.EventHandler(this.listOfBlocks_DoubleClick);
             // 
-            // cVehiculos
+            // bLoadAssets
             // 
-            resources.ApplyResources(this.cVehiculos, "cVehiculos");
-            this.cVehiculos.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cVehiculos.Name = "cVehiculos";
-            this.cVehiculos.UseVisualStyleBackColor = true;
-            this.cVehiculos.Click += new System.EventHandler(this.button1_Click);
+            resources.ApplyResources(this.bLoadAssets, "bLoadAssets");
+            this.bLoadAssets.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.bLoadAssets.Name = "bLoadAssets";
+            this.bLoadAssets.UseVisualStyleBackColor = true;
+            this.bLoadAssets.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // bLoadScene
             // 
-            resources.ApplyResources(this.button2, "button2");
-            this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button2.Name = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // lOculto
-            // 
-            resources.ApplyResources(this.lOculto, "lOculto");
-            this.lOculto.Name = "lOculto";
+            resources.ApplyResources(this.bLoadScene, "bLoadScene");
+            this.bLoadScene.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.bLoadScene.Name = "bLoadScene";
+            this.bLoadScene.UseVisualStyleBackColor = true;
+            this.bLoadScene.Click += new System.EventHandler(this.bLoadScene_Click);
             // 
             // lVelocidad
             // 
@@ -153,14 +149,15 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.bDelete);
             this.panel1.Controls.Add(this.bInsertVehicle);
             this.panel1.Controls.Add(this.lTLights);
-            this.panel1.Controls.Add(this.button2);
+            this.panel1.Controls.Add(this.bLoadScene);
             this.panel1.Controls.Add(this.bTlights);
             this.panel1.Controls.Add(this.bUpdate);
             this.panel1.Controls.Add(this.bVelocidades);
             this.panel1.Controls.Add(this.bSemaforos);
-            this.panel1.Controls.Add(this.cVehiculos);
+            this.panel1.Controls.Add(this.bLoadAssets);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.lContent);
             this.panel1.Controls.Add(this.lVelocidad);
@@ -221,7 +218,6 @@
             this.panel2.Controls.Add(this.label3);
             this.panel2.Controls.Add(this.listOfBlocks);
             this.panel2.Controls.Add(this.lVehiculos);
-            this.panel2.Controls.Add(this.lOculto);
             resources.ApplyResources(this.panel2, "panel2");
             this.panel2.Name = "panel2";
             // 
@@ -311,17 +307,25 @@
             resources.ApplyResources(this.tabPage3, "tabPage3");
             this.tabPage3.Name = "tabPage3";
             // 
+            // label8
+            // 
+            this.label8.AllowDrop = true;
+            resources.ApplyResources(this.label8, "label8");
+            this.label8.Name = "label8";
+            // 
             // label2
             // 
             this.label2.AllowDrop = true;
             resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
             // 
-            // label8
+            // bDelete
             // 
-            this.label8.AllowDrop = true;
-            resources.ApplyResources(this.label8, "label8");
-            this.label8.Name = "label8";
+            resources.ApplyResources(this.bDelete, "bDelete");
+            this.bDelete.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.bDelete.Name = "bDelete";
+            this.bDelete.UseVisualStyleBackColor = true;
+            this.bDelete.Click += new System.EventHandler(this.button1_Click_2);
             // 
             // BlockTab
             // 
@@ -349,9 +353,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lVehiculos;
         private System.Windows.Forms.ListBox listOfBlocks;
-        private System.Windows.Forms.Button cVehiculos;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Label lOculto;
+        private System.Windows.Forms.Button bLoadAssets;
+        private System.Windows.Forms.Button bLoadScene;
         private System.Windows.Forms.Label lVelocidad;
         private System.Windows.Forms.Button bUpdate;
         private System.Windows.Forms.Label lContent;
@@ -381,5 +384,6 @@
         private System.Windows.Forms.Label label11;
         public System.Windows.Forms.TextBox tbMin;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button bDelete;
     }
 }

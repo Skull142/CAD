@@ -26,6 +26,7 @@ namespace AutoCADAPI.Lab4
         }
 
         public String Directory_Path;
+        public int sceneCounter = 0;
 
 
         public BlockTab()
@@ -58,27 +59,19 @@ namespace AutoCADAPI.Lab4
 
         private void listOfBlocks_DoubleClick(object sender, EventArgs e)
         {
-            this.MethodToExecute("InsertaVehiculo");
+            //this.MethodToExecute("InsertaVehiculo");
         }
 
         public void PrintValues(List<Movil> mobiles, List<Semaforo> semaforos)
         {
             if (mobiles.Count == 0)
-            {
                 VelocityState(false);
-                UpdateState(false);
-            }
             else
-            {
                 VelocityState(true);
-                UpdateState(true);
-            }
-            this.lContent.Text = string.Format("Vehicles: {0}\nTraffic Lights: {1}\nPaths: {2}", mobiles.Count, semaforos.Count, 0);
+            //
             this.bVelocidades.Items.Clear();
             foreach (Movil m in mobiles)
-            {
                 this.bVelocidades.Items.Add(m.Data);
-            }
             //
             this.bSemaforos.Items.Clear();
             if (semaforos.Count == 0)
@@ -89,13 +82,17 @@ namespace AutoCADAPI.Lab4
             {
                 this.bSemaforos.Items.Add(s.Data);
             }
+            if(mobiles.Count > 0 || semaforos.Count > 0)
+                UpdateState(true);
+            else
+                UpdateState(false);
+            this.lContent.Text = string.Format("Vehicles: {0}\nTraffic Lights: {1}\nPaths: {2}", mobiles.Count, semaforos.Count, 0);
 
         }
         //ETIQUETAS PARA EL CONTENIDO DEL BLOQUE DE SELECCIOM
         void HidesState(bool state)
         {
             this.lVehiculos.Visible = state;
-            this.lOculto.Visible = state;
             this.listOfBlocks.Enabled = state;
             this.listOfBlocks.Visible = state;
             this.bInsertVehicle.Visible = state;
@@ -123,13 +120,15 @@ namespace AutoCADAPI.Lab4
         {
             this.bUpdate.Enabled = state;
             this.bUpdate.Visible = state;
+            this.bDelete.Enabled = state;
+            this.bDelete.Visible = state;
             this.lContent.Visible = state;
         }
 
 
         private void bUpdate_Click(object sender, EventArgs e)
         {
-            this.MethodToExecute("MoverMoviles");
+            this.MethodToExecute("UpdateScene");
         }
 
 
@@ -144,37 +143,47 @@ namespace AutoCADAPI.Lab4
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            this.MethodToExecute("InsertaSemaforo");
+            this.MethodToExecute("InsertTrafficLight");
         }
 
         private void bInsertVehicle_Click(object sender, EventArgs e)
         {
-            this.MethodToExecute("InsertaVehiculo");
+            this.MethodToExecute("InsertVehicle");
         }
 
         private void tbCaution_TextChanged(object sender, EventArgs e)
         {
-            this.MethodToExecute("CambiarParametroExternos");
+            this.MethodToExecute("ChangeExternParameters");
         }
 
         private void tbStopGo_TextChanged(object sender, EventArgs e)
         {
-            this.MethodToExecute("CambiarParametroExternos");
+            this.MethodToExecute("ChangeExternParameters");
         }
 
         private void tbZpos_TextChanged(object sender, EventArgs e)
         {
-            this.MethodToExecute("CambiarParametroExternos");
+            this.MethodToExecute("ChangeExternParameters");
         }
 
         private void tbMin_TextChanged(object sender, EventArgs e)
         {
-            this.MethodToExecute("CambiarParametroExternos");
+            this.MethodToExecute("ChangeExternParameters");
         }
 
         private void tbMax_TextChanged(object sender, EventArgs e)
         {
-            this.MethodToExecute("CambiarParametroExternos");
+            this.MethodToExecute("ChangeExternParameters");
+        }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+            this.MethodToExecute("DeleteElement");
+        }
+
+        private void bLoadScene_Click(object sender, EventArgs e)
+        {
+            this.MethodToExecute("LoadScene");
         }
     }
 }

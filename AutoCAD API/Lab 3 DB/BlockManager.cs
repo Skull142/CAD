@@ -40,7 +40,7 @@ namespace AutoCADAPI.Lab3
         /// <summary>
         /// Esta función se encarga de cargar el bloque
         /// </summary>
-        public void Load()
+        public void Load( string nameTheNewBlock )
         {
             Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
             Database dwg = Application.DocumentManager.MdiActiveDocument.Database;
@@ -54,7 +54,9 @@ namespace AutoCADAPI.Lab3
                         //Se inserta un registro de bloque vacio
                         blkTab.UpgradeOpen();
                         BlockTableRecord newRecord = new BlockTableRecord();
-                        newRecord.Name = this.Blockname;
+                        //newRecord.Name = this.Blockname;
+                        newRecord.Name = nameTheNewBlock;
+                        this.Blockname = newRecord.Name; //
                         blkTab.Add(newRecord);
                         tr.AddNewlyCreatedDBObject(newRecord, true);
                         //Abrir el archivo dwg como base de datos
