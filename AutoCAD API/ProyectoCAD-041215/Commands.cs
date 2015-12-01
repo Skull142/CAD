@@ -78,19 +78,23 @@ namespace ProyectoCAD_041215
             //validar la carga de la interfaz
             if (this.ctrl_blockTab == null)
                 return;
-            String pth = System.IO.Path.Combine(this.ctrl_blockTab.Directory_Path,
-                "trafficLight.dwg");
+            String pthTL = System.IO.Path.Combine(this.ctrl_blockTab.Directory_Path, "trafficLight.dwg");
+            String pthTLI = System.IO.Path.Combine(this.ctrl_blockTab.Directory_Path, "trafficLightIndicator.dwg");
 
-            if (File.Exists(pth))
+            if (File.Exists(pthTL) && File.Exists(pthTLI))
             {
-                BlockManager blkMan = new BlockManager(pth);
+                BlockManager blkManTL = new BlockManager(pthTL);
+                BlockManager blkManTLI = new BlockManager(pthTLI);
                 Point3d pos;
                 if (Selector.Point("Select the point to insert the Traffic Light (Point3D)", out pos))
                 {
-                    blkMan.Load("TL"+this.semaforosCounter.ToString("D3"));
+                    blkManTL.Load("TL"+this.semaforosCounter.ToString("D3"));
+                    blkManTLI.Load("TLI" + this.semaforosCounter.ToString("D3"));
+                    //
+                    ObjectId idTLI = blkManTLI.Insert(Point3d.Origin);
                     pos = new Point3d(pos.X, pos.Y, float.Parse(StringNull( this.ctrl_blockTab.tbZpos.Text) ));
-                    ObjectId id = blkMan.Insert( pos );
-                    this.semaforos.Add( new Semaforo( ref id, semaforos.Count,int.Parse(StringNull( this.ctrl_blockTab.tbStopGo.Text )), int.Parse( StringNull( this.ctrl_blockTab.tbCaution.Text) ) ));
+                    ObjectId idTL = blkManTL.Insert( pos );
+                    this.semaforos.Add( new Semaforo( ref idTL, semaforos.Count,int.Parse(StringNull( this.ctrl_blockTab.tbStopGo.Text )), int.Parse( StringNull( this.ctrl_blockTab.tbCaution.Text) ), ref idTLI));
                     semaforosCounter++;
                     //
                     this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
@@ -164,17 +168,17 @@ namespace ProyectoCAD_041215
                     if( m.mobile.Equals(obj) )
                     {
                         ed.WriteMessage("{0} Erased!\n", m.bloque.Name);
-                        this.DeleteVehicle(obj, m);
+                        this.DeleteVehicle(m);
                         this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
                         return;
                     }
                 }
                 foreach (Semaforo s in semaforos)
                 {
-                    if (s.id.Equals(obj))
+                    if (s.id.Equals(obj) || s.idIndicator.Equals(obj))
                     {
                         ed.WriteMessage("{0} Erased!\n", s.block.Name);
-                        this.DeleteTrafficLight(obj, s);
+                        this.DeleteTrafficLight(s);
                         this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
                         return;
                     }
@@ -183,15 +187,16 @@ namespace ProyectoCAD_041215
             }
         }
 
-        public void DeleteVehicle(ObjectId obj, Movil m)
+        public void DeleteVehicle(Movil m)
         {
             moviles.Remove(m);
-            DBMan.Erase(obj);
+            DBMan.Erase(m.mobile);
         }
-        public void DeleteTrafficLight(ObjectId obj, Semaforo s)
+        public void DeleteTrafficLight(Semaforo s)
         {
             semaforos.Remove(s);
-            DBMan.Erase(obj);
+            DBMan.Erase(s.idIndicator);
+            DBMan.Erase(s.id);
         }
         public void DeleteGoals()
         {
@@ -205,7 +210,7 @@ namespace ProyectoCAD_041215
                     if (m.goal)
                     {
                         again = true;
-                        this.DeleteVehicle(m.mobile, m);
+                        this.DeleteVehicle(m);
                         this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
                         break;
                     }

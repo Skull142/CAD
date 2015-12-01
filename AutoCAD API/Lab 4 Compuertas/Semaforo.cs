@@ -19,7 +19,9 @@ namespace AutoCADAPI.Lab4
     {
         public EstadoSemaforo state;
         public ObjectId id;
+        public ObjectId idIndicator;
         public BlockReference block;
+        public BlockReference blockIndicator;
         public int indexList;
         private int changeStateLimit;
         private int changeStateLimitPrecaution;
@@ -30,23 +32,27 @@ namespace AutoCADAPI.Lab4
             {
                 string aux = "";
                 if (this.state == EstadoSemaforo.alto)
-                    aux = "Alto";
+                    aux = "Stop";
                 if (this.state == EstadoSemaforo.precaucion)
-                    aux = "Precaución";
+                    aux = "Caution";
                 if (this.state == EstadoSemaforo.siga)
-                    aux = "Siga";
+                    aux = "Go";
                 return this.block.Name+":\t"+aux;
             }
         }
-        public Semaforo(ref ObjectId id, int indexList, int changeStateLimit, int changeStateLimitPrecaution)
+        public Semaforo(ref ObjectId id, int indexList, int changeStateLimit, int changeStateLimitPrecaution, ref ObjectId idI)
         {
             this.id = id;
+            this.idIndicator = idI;
             this.block = Lab3.DBMan.OpenEnity(id) as BlockReference;
+            this.blockIndicator = Lab3.DBMan.OpenEnity(idIndicator) as BlockReference;
             this.indexList = indexList;
             this.state = EstadoSemaforo.alto;
             this.changeStateLimit = changeStateLimit;
             this.changeStateLimitPrecaution = changeStateLimitPrecaution;
             this.count = 0;
+            Lab3.DBMan.UpdateBlockPosition( new Point3d(this.block.Position.X, this.block.Position.Y, this.block.Position.Z+100f), this.idIndicator);
+            this.UpdateColor();
         }
         public Semaforo(int changeStateLimit)
         {
@@ -74,13 +80,25 @@ namespace AutoCADAPI.Lab4
                 this.state = EstadoSemaforo.precaucion;
                 this.count = 0;
             }
+            this.UpdateColor();
         }
-
+        public void UpdateColor()
+        {
+            Autodesk.AutoCAD.Colors.Color c = new Autodesk.AutoCAD.Colors.Color();
+            if (this.state == EstadoSemaforo.siga)
+                c = Autodesk.AutoCAD.Colors.Color.FromRgb((byte)0, (byte)255, (byte)0);
+            if (this.state == EstadoSemaforo.alto)
+                c = Autodesk.AutoCAD.Colors.Color.FromRgb((byte)255, (byte)0, (byte)0);
+            if (this.state == EstadoSemaforo.precaucion)
+                c = Autodesk.AutoCAD.Colors.Color.FromRgb((byte)255, (byte)255, (byte)0);
+            Lab3.DBMan.UpdateColor(this.idIndicator, c);
+        }
         public void ChangeExternValues( int changeStateLimit, int changeStateLimitPrecaution, double Zpos)
         {
             this.changeStateLimit = changeStateLimit;
             this.changeStateLimitPrecaution = changeStateLimitPrecaution;
-            Lab3.DBMan.UpdateBlockPosition( new Point3d(this.block.Position.X, this.block.Position.Y,Zpos),this.id);
+            Lab3.DBMan.UpdateBlockPosition( new Point3d(this.block.Position.X, this.block.Position.Y,Zpos), this.id);
+            Lab3.DBMan.UpdateBlockPosition(new Point3d(this.block.Position.X, this.block.Position.Y, this.block.Position.Z + 100f), this.idIndicator);
         }
 
     }
