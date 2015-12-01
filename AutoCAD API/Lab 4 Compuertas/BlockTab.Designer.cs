@@ -41,12 +41,14 @@
             this.bSemaforos = new System.Windows.Forms.ListBox();
             this.bTlights = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.bDelete = new System.Windows.Forms.Button();
             this.bInsertVehicle = new System.Windows.Forms.Button();
             this.lTLights = new System.Windows.Forms.Label();
             this.ljb = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.cbLoopTravel = new System.Windows.Forms.CheckBox();
             this.tbMax = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -63,7 +65,6 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label8 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.bDelete = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.ljb.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -164,6 +165,14 @@
             resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
             // 
+            // bDelete
+            // 
+            resources.ApplyResources(this.bDelete, "bDelete");
+            this.bDelete.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.bDelete.Name = "bDelete";
+            this.bDelete.UseVisualStyleBackColor = true;
+            this.bDelete.Click += new System.EventHandler(this.button1_Click_2);
+            // 
             // bInsertVehicle
             // 
             resources.ApplyResources(this.bInsertVehicle, "bInsertVehicle");
@@ -203,6 +212,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.cbLoopTravel);
             this.panel2.Controls.Add(this.tbMax);
             this.panel2.Controls.Add(this.label9);
             this.panel2.Controls.Add(this.label10);
@@ -220,6 +230,15 @@
             this.panel2.Controls.Add(this.lVehiculos);
             resources.ApplyResources(this.panel2, "panel2");
             this.panel2.Name = "panel2";
+            // 
+            // cbLoopTravel
+            // 
+            resources.ApplyResources(this.cbLoopTravel, "cbLoopTravel");
+            this.cbLoopTravel.Checked = true;
+            this.cbLoopTravel.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbLoopTravel.Name = "cbLoopTravel";
+            this.cbLoopTravel.UseVisualStyleBackColor = true;
+            this.cbLoopTravel.CheckedChanged += new System.EventHandler(this.cbLoopTravel_CheckedChanged);
             // 
             // tbMax
             // 
@@ -319,14 +338,6 @@
             resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
             // 
-            // bDelete
-            // 
-            resources.ApplyResources(this.bDelete, "bDelete");
-            this.bDelete.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.bDelete.Name = "bDelete";
-            this.bDelete.UseVisualStyleBackColor = true;
-            this.bDelete.Click += new System.EventHandler(this.button1_Click_2);
-            // 
             // BlockTab
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -385,5 +396,6 @@
         public System.Windows.Forms.TextBox tbMin;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button bDelete;
+        public System.Windows.Forms.CheckBox cbLoopTravel;
     }
 }

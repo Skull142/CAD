@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Collections.Generic;
-//using System.Linq;
+using System.Linq;
 using System.Text;
 //using System.Threading.Tasks;
 //Usings de AutoCAD
@@ -64,7 +64,7 @@ namespace ProyectoCAD_041215
                     ObjectId id = blkMan.Insert(Point3d.Origin);
                     AttributeManager attMan = new AttributeManager(id);
                     //
-                    this.moviles.Add(new Movil(ref rutaId, ref id, double.Parse(StringNull(this.ctrl_blockTab.tbMin.Text)), double.Parse(StringNull(this.ctrl_blockTab.tbMax.Text)), moviles.Count));
+                    this.moviles.Add(new Movil(ref rutaId, ref id, double.Parse(StringNull(this.ctrl_blockTab.tbMin.Text)), double.Parse(StringNull(this.ctrl_blockTab.tbMax.Text)), this.ctrl_blockTab.cbLoopTravel.Checked));
                     this.movilesCounter++;
                     attMan.SetAttribute("ID", "V" + this.moviles.Count);
                     //
@@ -113,6 +113,7 @@ namespace ProyectoCAD_041215
             {
                 s.Update();
             }
+            this.DeleteGoals();
             this.ctrl_blockTab.PrintValues( this.moviles, this.semaforos );
         }
 
@@ -124,7 +125,7 @@ namespace ProyectoCAD_041215
             if (this.moviles.Count == 0 && this.semaforos.Count == 0)
                 return;
             foreach (Movil m in this.moviles)
-                m.ChangeExternValues(double.Parse(StringNull(this.ctrl_blockTab.tbMin.Text)), double.Parse(StringNull(this.ctrl_blockTab.tbMax.Text)));
+                m.ChangeExternValues(double.Parse(StringNull(this.ctrl_blockTab.tbMin.Text)), double.Parse(StringNull(this.ctrl_blockTab.tbMax.Text)), this.ctrl_blockTab.cbLoopTravel.Checked);
             foreach (Semaforo s in this.semaforos)
                 s.ChangeExternValues( int.Parse(StringNull( this.ctrl_blockTab.tbStopGo.Text) ), int.Parse(StringNull( this.ctrl_blockTab.tbCaution.Text) ), float.Parse(StringNull( this.ctrl_blockTab.tbZpos.Text) ));
         }
@@ -156,15 +157,14 @@ namespace ProyectoCAD_041215
             Document doc = Application.DocumentManager.MdiActiveDocument;
             Editor ed = doc.Editor;
             ObjectId obj;
-            if (Selector.ObjectId("OBJ", out obj))
+            if (Selector.ObjectId("Select the element to Delete:\n", out obj))
             {
                 foreach (Movil m in moviles)
                 {
                     if( m.mobile.Equals(obj) )
                     {
-                        ed.WriteMessage("{0} Erase!\n",m.bloque.Name);
-                        moviles.Remove(m);
-                        DBMan.Erase(obj);
+                        ed.WriteMessage("{0} Erased!\n", m.bloque.Name);
+                        this.DeleteVehicle(obj, m);
                         this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
                         return;
                     }
@@ -173,15 +173,48 @@ namespace ProyectoCAD_041215
                 {
                     if (s.id.Equals(obj))
                     {
-                        ed.WriteMessage("{0} Erase!\n", s.block.Name);
-                        semaforos.Remove(s);
-                        DBMan.Erase(obj);
+                        ed.WriteMessage("{0} Erased!\n", s.block.Name);
+                        this.DeleteTrafficLight(obj, s);
                         this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
                         return;
                     }
                 }
                 ed.WriteMessage("{0} Not is element of the Traffic Simulator System!\n", obj);
             }
+        }
+
+        public void DeleteVehicle(ObjectId obj, Movil m)
+        {
+            moviles.Remove(m);
+            DBMan.Erase(obj);
+        }
+        public void DeleteTrafficLight(ObjectId obj, Semaforo s)
+        {
+            semaforos.Remove(s);
+            DBMan.Erase(obj);
+        }
+        public void DeleteGoals()
+        {
+            bool again = false;
+            do
+            {
+                if (this.moviles.Count < 1)
+                    return;
+                foreach (Movil m in this.moviles)
+                {
+                    if (m.goal)
+                    {
+                        again = true;
+                        this.DeleteVehicle(m.mobile, m);
+                        this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
+                        break;
+                    }
+                    else
+                        again = false;
+                }
+
+            }
+            while (again);
         }
         [CommandMethod("LoadScene")]
         public void LoadScene()

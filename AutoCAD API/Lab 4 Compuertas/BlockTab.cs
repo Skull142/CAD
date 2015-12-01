@@ -185,5 +185,10 @@ namespace AutoCADAPI.Lab4
         {
             this.MethodToExecute("LoadScene");
         }
+
+        private void cbLoopTravel_CheckedChanged(object sender, EventArgs e)
+        {
+            this.MethodToExecute("ChangeExternParameters");
+        }
     }
 }

@@ -114,7 +114,7 @@ namespace AutoCADAPI.Lab4
                    typeof(Polyline), out rutaId);
             Lab2.Selector.ObjectId("Selecciona el movil", "",
                 typeof(BlockReference), out movilId);
-            m = new Movil(ref rutaId, ref movilId,600,300,0);
+            m = new Movil(ref rutaId, ref movilId,600,300,true);
         }
 
         [CommandMethod("MoveItem2")]
