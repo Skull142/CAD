@@ -153,6 +153,52 @@ namespace ProyectoCAD_041215
             }
 
         }
+        [CommandMethod("FocusVehicle")]
+        public void FocusVehicle()
+        {
+            if (this.ctrl_blockTab.itemList.Equals(""))
+                return;
+            foreach (Movil m in this.moviles)
+            {
+                if (m.bloque.Name.Equals(this.ctrl_blockTab.itemList))
+                {
+                    Document doc = Application.DocumentManager.MdiActiveDocument;
+                    Editor ed = doc.Editor;
+                    Point3d pos = m.bloque.Position;
+                    ViewTableRecord vw = new ViewTableRecord();
+                    vw.CenterPoint = new Point2d(pos.X, pos.Y);
+                    //vw.Elevation = pos.Z;
+                    vw.Height = (m.bloque.GeometricExtents.MaxPoint.Y - m.bloque.GeometricExtents.MinPoint.Y) * 2f;
+                    vw.Width = (m.bloque.GeometricExtents.MaxPoint.X - m.bloque.GeometricExtents.MinPoint.X) * 2f;
+                    ed.SetCurrentView(vw);
+                    this.ctrl_blockTab.itemList = "";
+                    return;
+                }
+            }
+        }
+        [CommandMethod("FocusTrafficLight")]
+        public void FocusTrafficLight()
+        {
+            if (this.ctrl_blockTab.itemList.Equals(""))
+                return;
+            foreach (Semaforo s in this.semaforos)
+            {
+                if (s.block.Name.Equals(this.ctrl_blockTab.itemList))
+                {
+                    Document doc = Application.DocumentManager.MdiActiveDocument;
+                    Editor ed = doc.Editor;
+                    Point3d pos = s.block.Position;
+                    ViewTableRecord vw = new ViewTableRecord();
+                    vw.CenterPoint = new Point2d(pos.X, pos.Y);
+                    //vw.Elevation = pos.Z;
+                    vw.Height = (s.block.GeometricExtents.MaxPoint.Y - s.block.GeometricExtents.MinPoint.Y) * 2f;
+                    vw.Width = (s.block.GeometricExtents.MaxPoint.X - s.block.GeometricExtents.MinPoint.X) * 2f;
+                    ed.SetCurrentView(vw);
+                    this.ctrl_blockTab.itemList = "";
+                    return;
+                }
+            }
+        }
         [CommandMethod("DeleteElement")]
         public void DeleteElement()
         {

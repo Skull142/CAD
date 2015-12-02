@@ -26,6 +26,7 @@ namespace AutoCADAPI.Lab4
         private int changeStateLimit;
         private int changeStateLimitPrecaution;
         private int count;
+        private Point3d posIndicator;
         public string Data
         {
             get
@@ -86,19 +87,29 @@ namespace AutoCADAPI.Lab4
         {
             Autodesk.AutoCAD.Colors.Color c = new Autodesk.AutoCAD.Colors.Color();
             if (this.state == EstadoSemaforo.siga)
+            {
                 c = Autodesk.AutoCAD.Colors.Color.FromRgb((byte)0, (byte)255, (byte)0);
+                this.posIndicator = new Point3d(2.5f, 0f, -12.5f);
+            }
             if (this.state == EstadoSemaforo.alto)
+            { 
                 c = Autodesk.AutoCAD.Colors.Color.FromRgb((byte)255, (byte)0, (byte)0);
+                this.posIndicator = new Point3d(2.5f, 0f, -2.5f);
+            }
             if (this.state == EstadoSemaforo.precaucion)
+            {
                 c = Autodesk.AutoCAD.Colors.Color.FromRgb((byte)255, (byte)255, (byte)0);
+                this.posIndicator = new Point3d(2.5f, 0f, -7.5f);
+            }
             Lab3.DBMan.UpdateColor(this.idIndicator, c);
+            Lab3.DBMan.UpdateBlockPosition(new Point3d(this.block.Position.X + this.posIndicator.X, this.block.Position.Y + this.posIndicator.Y, this.block.Position.Z + this.posIndicator.Z), this.idIndicator);
         }
         public void ChangeExternValues( int changeStateLimit, int changeStateLimitPrecaution, double Zpos)
         {
             this.changeStateLimit = changeStateLimit;
             this.changeStateLimitPrecaution = changeStateLimitPrecaution;
             Lab3.DBMan.UpdateBlockPosition( new Point3d(this.block.Position.X, this.block.Position.Y,Zpos), this.id);
-            Lab3.DBMan.UpdateBlockPosition(new Point3d(this.block.Position.X, this.block.Position.Y, this.block.Position.Z + 100f), this.idIndicator);
+            this.UpdateColor();
         }
 
     }

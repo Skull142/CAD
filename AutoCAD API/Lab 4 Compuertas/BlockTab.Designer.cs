@@ -132,6 +132,7 @@
             this.bVelocidades.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bVelocidades.FormattingEnabled = true;
             this.bVelocidades.Name = "bVelocidades";
+            this.bVelocidades.DoubleClick += new System.EventHandler(this.bVelocidades__DoubleClick);
             // 
             // bSemaforos
             // 
@@ -139,6 +140,7 @@
             this.bSemaforos.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bSemaforos.FormattingEnabled = true;
             this.bSemaforos.Name = "bSemaforos";
+            this.bSemaforos.DoubleClick += new System.EventHandler(this.bSemaforos__DoubleClick);
             // 
             // bTlights
             // 
@@ -234,8 +236,6 @@
             // cbLoopTravel
             // 
             resources.ApplyResources(this.cbLoopTravel, "cbLoopTravel");
-            this.cbLoopTravel.Checked = true;
-            this.cbLoopTravel.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbLoopTravel.Name = "cbLoopTravel";
             this.cbLoopTravel.UseVisualStyleBackColor = true;
             this.cbLoopTravel.CheckedChanged += new System.EventHandler(this.cbLoopTravel_CheckedChanged);

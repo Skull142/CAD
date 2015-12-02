@@ -26,13 +26,15 @@ namespace AutoCADAPI.Lab4
         }
 
         public String Directory_Path;
+        public string itemList;
         public int sceneCounter = 0;
 
 
         public BlockTab()
         {
             InitializeComponent();
-            this.Directory_Path = "NULL";
+            this.Directory_Path = "";
+            this.itemList = "";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -189,6 +191,18 @@ namespace AutoCADAPI.Lab4
         private void cbLoopTravel_CheckedChanged(object sender, EventArgs e)
         {
             this.MethodToExecute("ChangeExternParameters");
+        }
+
+        private void bVelocidades__DoubleClick(object sender, EventArgs e)
+        {
+            this.itemList = this.bVelocidades.SelectedItem.ToString().Split(':')[0];
+            this.MethodToExecute("FocusVehicle");
+        }
+
+        private void bSemaforos__DoubleClick(object sender, EventArgs e)
+        {
+            this.itemList = this.bSemaforos.SelectedItem.ToString().Split(':')[0];
+            this.MethodToExecute("FocusTrafficLight");
         }
     }
 }

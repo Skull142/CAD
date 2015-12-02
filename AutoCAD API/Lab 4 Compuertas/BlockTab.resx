@@ -788,7 +788,7 @@ xyz</value>
     <value>30</value>
   </data>
   <data name="tbMax.Text" xml:space="preserve">
-    <value>300</value>
+    <value>60</value>
   </data>
   <data name="tbMax.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
@@ -935,7 +935,7 @@ xyz</value>
     <value>25</value>
   </data>
   <data name="tbMin.Text" xml:space="preserve">
-    <value>700</value>
+    <value>100</value>
   </data>
   <data name="tbMin.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
@@ -968,7 +968,7 @@ xyz</value>
     <value>24</value>
   </data>
   <data name="tbZpos.Text" xml:space="preserve">
-    <value>350</value>
+    <value>80</value>
   </data>
   <data name="tbZpos.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
