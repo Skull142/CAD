@@ -37,9 +37,9 @@ namespace ProyectoCAD_041215
         {
             if (blockTab == null)
             {
-                this.mipaleta = new PaletteSet("Traffic Simulator");
+                this.mipaleta = new PaletteSet("TraSiSoft");
                 this.ctrl_blockTab = new BlockTab();
-                this.blockTab = this.mipaleta.Add("Insertar", this.ctrl_blockTab);
+                this.blockTab = this.mipaleta.Add("TraSiSoft Tab", this.ctrl_blockTab);
                 this.mipaleta.Visible = true;
             }
             else
@@ -60,6 +60,7 @@ namespace ProyectoCAD_041215
                 ObjectId rutaId;
                 if (Selector.ObjectId("Select the Path to insert the Vehicle (Polyline)", "", typeof(Polyline), out rutaId))
                 {
+                    AddPath(rutaId);
                     blkMan.Load("V"+this.movilesCounter.ToString("D3"));
                     ObjectId id = blkMan.Insert(Point3d.Origin);
                     AttributeManager attMan = new AttributeManager(id);
@@ -68,9 +69,22 @@ namespace ProyectoCAD_041215
                     this.movilesCounter++;
                     attMan.SetAttribute("ID", "V" + this.moviles.Count);
                     //
-                    this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
+                    this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos, this.paths);
                 }
             }
+        }
+        public void AddPath(ObjectId path)
+        {
+            Polyline l = DBMan.OpenEnity(path) as Polyline;
+            foreach(Polyline p in this.paths)
+            {
+                if ( p.Equals(l) )
+                {
+                    return;
+                }
+            }
+            this.paths.Add(l);
+
         }
         [CommandMethod("InsertTrafficLight")]
         public void InsertTrafficLight()
@@ -97,7 +111,7 @@ namespace ProyectoCAD_041215
                     this.semaforos.Add( new Semaforo( ref idTL, semaforos.Count,int.Parse(StringNull( this.ctrl_blockTab.tbStopGo.Text )), int.Parse( StringNull( this.ctrl_blockTab.tbCaution.Text) ), ref idTLI));
                     semaforosCounter++;
                     //
-                    this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
+                    this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos, this.paths);
                 }
             }
         }
@@ -108,17 +122,17 @@ namespace ProyectoCAD_041215
                 return;
             if (this.moviles.Count == 0 && this.semaforos.Count == 0)
                 return;
+            foreach (Semaforo s in this.semaforos)
+                s.Update();
             foreach (Movil m in this.moviles)
-            {
-                m.CheckVelocity(this.moviles, this.semaforos);
+            { 
+                m.CheckAround(this.moviles, this.semaforos);
                 m.Move();
             }
-            foreach (Semaforo s in this.semaforos)
-            {
-                s.Update();
-            }
+            //foreach (Movil m in this.moviles)
+                //m.Move();
             this.DeleteGoals();
-            this.ctrl_blockTab.PrintValues( this.moviles, this.semaforos );
+            this.ctrl_blockTab.PrintValues( this.moviles, this.semaforos, this.paths);
         }
 
         [CommandMethod("ChangeExternParameters")]
@@ -215,7 +229,7 @@ namespace ProyectoCAD_041215
                     {
                         ed.WriteMessage("{0} Erased!\n", m.bloque.Name);
                         this.DeleteVehicle(m);
-                        this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
+                        this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos, this.paths);
                         return;
                     }
                 }
@@ -225,7 +239,7 @@ namespace ProyectoCAD_041215
                     {
                         ed.WriteMessage("{0} Erased!\n", s.block.Name);
                         this.DeleteTrafficLight(s);
-                        this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
+                        this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos, this.paths);
                         return;
                     }
                 }
@@ -257,7 +271,7 @@ namespace ProyectoCAD_041215
                     {
                         again = true;
                         this.DeleteVehicle(m);
-                        this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos);
+                        this.ctrl_blockTab.PrintValues(this.moviles, this.semaforos, this.paths);
                         break;
                     }
                     else

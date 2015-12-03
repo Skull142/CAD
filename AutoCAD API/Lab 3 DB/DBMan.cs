@@ -106,7 +106,7 @@ namespace AutoCADAPI.Lab3
 
         public static void UpdateBlockRotation(double angle, ObjectId blkId)
         {
-                      Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+            Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
             Database dwg = Application.DocumentManager.MdiActiveDocument.Database;
             using(Transaction tr = dwg.TransactionManager.StartTransaction())
             {

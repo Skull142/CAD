@@ -10,7 +10,7 @@ namespace AutoCADAPI.Lab4
 {
     public class Movil
     {
-        private Double d = 17;
+        private Double d = 14;
         private float vMax = 60;
         private int dS = 10;
         public double dPromMin;
@@ -34,16 +34,15 @@ namespace AutoCADAPI.Lab4
         private int pointActualCurve;
         public float velocityScale = 1f;
         private double angleRaycast = Math.PI / 4;
-
+        //
         public string Data
         {
             get
             {
-                AttributeManager attribute = new AttributeManager(mobile);
-                //return attribute.GetAttribute("ID").ToString() + ": " + velocity.ToString() + " [Kms/hr]";
                 return this.bloque.Name + ":\t" + ( this.velocityScale < 0.001 ? "0":(this.velocity.Length*(this.vMax/this.d)).ToString("N02") ) + " [Km/hr]";
             }
         }
+        //
         public Movil(ref ObjectId line, ref ObjectId mobile, double minSeparation, double maxSeparation, bool loopTravel)
         {
             this.line = line;
@@ -72,6 +71,7 @@ namespace AutoCADAPI.Lab4
             this.velocity = this.UpdateDireccion();
             Lab3.DBMan.UpdateBlockRotation(new Vector2d(this.velocity.X, this.velocity.Y).Angle, this.mobile);
         }
+        //
         public void Move()
         {
             Document doc = Application.DocumentManager.MdiActiveDocument;
@@ -174,8 +174,8 @@ namespace AutoCADAPI.Lab4
             }
             return v;
         }
-
-        public void CheckVelocity( List<Movil> mobiles, List<Semaforo> trafficLights)
+        //
+        public void CheckAround( List<Movil> mobiles, List<Semaforo> trafficLights)
         {
             Document doc = Application.DocumentManager.MdiActiveDocument;
             Editor ed = doc.Editor;
@@ -185,6 +185,7 @@ namespace AutoCADAPI.Lab4
                 return;
             this.CheckTrafficLightsAround(trafficLights);
         }
+        //
         private void CheckMobilesAround(List<Movil> mobiles)
         {
             float vsAux = 1f;
@@ -193,7 +194,7 @@ namespace AutoCADAPI.Lab4
                 Vector3d vDir = m.bloque.Position - this.bloque.Position;
                 if (vDir.Length < this.dPromMin && vDir.Length > 0)
                 {
-                    if (this.dir.GetAngleTo(vDir) < this.angleRaycast && this.dir.GetAngleTo(m.dir) < (Math.PI*3f)/4f)
+                    if (this.dir.GetAngleTo(vDir) < this.angleRaycast && this.dir.GetAngleTo(m.dir) < (Math.PI * 3f) / 4f)
                     {
                         if (vDir.Length <= this.dPromMax)
                             vsAux = 0.00001f;
@@ -207,6 +208,8 @@ namespace AutoCADAPI.Lab4
                                     vsAux = 0.4f;
                             }
                         }
+                        if (m.velocityScale > 0.01f)
+                            vsAux = 0.00001f;
                     }
                 }
                 if (this.velocityScale > vsAux)
@@ -215,6 +218,7 @@ namespace AutoCADAPI.Lab4
                     return;
             }
         }
+        //
         private void CheckTrafficLightsAround(List<Semaforo> trafficLights)
         {
             float vsAux = 1f;
@@ -255,7 +259,7 @@ namespace AutoCADAPI.Lab4
                     return;
             }
         }
-
+        //
         public void ChangeExternValues(double minSeparation, double maxSeparation, bool loopTravel)
         {
             this.dPromMin = minSeparation;

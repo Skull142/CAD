@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AcadApp = Autodesk.AutoCAD.ApplicationServices.Application;
 using System.IO;
+using Autodesk.AutoCAD.DatabaseServices;
 
 namespace AutoCADAPI.Lab4
 {
@@ -64,7 +65,7 @@ namespace AutoCADAPI.Lab4
             //this.MethodToExecute("InsertaVehiculo");
         }
 
-        public void PrintValues(List<Movil> mobiles, List<Semaforo> semaforos)
+        public void PrintValues(List<Movil> mobiles, List<Semaforo> semaforos, List<Polyline> paths)
         {
             if (mobiles.Count == 0)
                 VelocityState(false);
@@ -88,7 +89,7 @@ namespace AutoCADAPI.Lab4
                 UpdateState(true);
             else
                 UpdateState(false);
-            this.lContent.Text = string.Format("Vehicles: {0}\nTraffic Lights: {1}\nPaths: {2}", mobiles.Count, semaforos.Count, 0);
+            this.lContent.Text = string.Format("Vehicles: {0}\nTraffic Lights: {1}\nPaths: {2}", mobiles.Count, semaforos.Count, paths.Count);
 
         }
         //ETIQUETAS PARA EL CONTENIDO DEL BLOQUE DE SELECCIOM
